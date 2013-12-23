@@ -2,7 +2,7 @@
 
 Lightwheight JavaScript library that generates circular graphs in SVG.
 
-## Usage
+### Usage
 
 Include the `circles.js` file in your HTML file. There are no dependencies.
 
@@ -28,7 +28,7 @@ where
 * `text` - the text to display at the centre of the graph (optional, the percentage will show if not specified)
 * `colors` - an array of colors, with the first item coloring the full circle (optional, it will be `['#EEE', '#F00']` if not specified)
 
-## Styles
+### Styles
 
 The styles have been specified inline to avoid external dependencies. But they can be overriden via CSS easily, being simply HTML elements.
 
@@ -37,18 +37,18 @@ To help with this, a few CSS classes have been exposed:
 * `circles-wrp` - the element containing the graph
 * `circles-text` - the element containing the text
 
-## Compatibility
+### Compatibility
 
 Browsers that support SVG.
 
-### Desktop
+**Desktop**
 - Firefox 3+
 - Chrome 4+
 - Safari 3.2+
 - Opera 9+
 - IE9 +
 
-### Mobile
+**Mobile**
 - iOS Safari 3.2+
 - Android Browser 3+
 - Opera Mobile 10+
@@ -59,6 +59,7 @@ Browsers that support SVG.
 ###Inspirations
 
 [Highcharts](http://highcharts.com)
+
 Wout Fierens's [svg.js](http://svgjs.com)
 
 
