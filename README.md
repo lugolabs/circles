@@ -44,25 +44,24 @@ To help with this, a few CSS classes have been exposed:
 Browsers that support SVG.
 
 **Desktop**
-- Firefox 3+
-- Chrome 4+
-- Safari 3.2+
-- Opera 9+
-- IE9 +
+* Firefox 3+
+* Chrome 4+
+* Safari 3.2+
+* Opera 9+
+* IE9 +
 
 **Mobile**
-- iOS Safari 3.2+
-- Android Browser 3+
-- Opera Mobile 10+
-- Chrome for Android 18+
-- Firefox for Android 15+
+* iOS Safari 3.2+
+* Android Browser 3+
+* Opera Mobile 10+
+* Chrome for Android 18+
+* Firefox for Android 15+
 
 
 ###Inspirations
 
-[Highcharts](http://highcharts.com)
-
-Wout Fierens's [svg.js](http://svgjs.com)
+* [Highcharts](http://highcharts.com)
+* Wout Fierens's [svg.js](http://svgjs.com)
 
 
 ###Licence
