@@ -1,5 +1,7 @@
 # Circles
 
+![Circles](http://lugolabs.com/static/circles.png)
+
 Lightwheight JavaScript library that generates circular graphs in SVG.
 
 ### Usage
