@@ -1,0 +1,41 @@
+<html>
+<head>
+	<title>Circles</title>
+	<style>
+		#canvas .circle {
+			display: inline-block;
+			margin: 1em;
+		}
+	</style>
+</head>
+<body>
+	<div id="canvas">
+		<div class="circle" id="circles-1"></div>
+		<div class="circle" id="circles-2"></div>
+		<div class="circle" id="circles-3"></div>
+		<div class="circle" id="circles-4"></div>
+		<div class="circle" id="circles-5"></div>
+	</div>
+
+	<script src="../circles.js"></script>
+	<script>
+		var colors = [
+			['#D3B6C6', '#4B253A'], ['#FCE6A4', '#EFB917'], ['#BEE3F7', '#45AEEA'], ['#F8F9B6', '#D2D558'], ['#F4BCBF', '#D43A43']
+		];
+
+		for (var i = 1; i <= 5; i++) {
+			var child = document.getElementById('circles-' + i),
+				percentage = 31.42 + (i * 9.84);
+
+			Circles.create({
+				id:         child.id,
+				percentage: percentage,
+				radius:     60,
+				width:      10,
+				text:       percentage / 10,
+				colors:     colors[i - 1]
+			});
+		}
+	</script>
+</body>
+</html>
