@@ -65,7 +65,7 @@
     },
 
     _generatePath: function(percentage, open, color) {
-      var end      = this._start + ((percentage / 100) * this._circ);
+      var end      = this._start + ((percentage / 100) * this._circ),
         endPrecise = this._precise(end),
         d          = this._arc(endPrecise, open);
 
@@ -77,7 +77,7 @@
     },
 
     _arc: function(end, open) {
-      var endAdjusted = end - 0.001
+      var endAdjusted = end - 0.001,
         longArc       = end - this._startPrecise < Math.PI ? 0 : 1;
 
       return [
