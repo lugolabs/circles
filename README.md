@@ -1,8 +1,12 @@
 # Circles
 
-![Circles](http://lugolabs.com/static/circles.png)
+[![Circles](http://lugolabs.com/static/circles.png)](http://lugolabs.com/blog/2013/12/24/create-circular-svg-charts-with-circles)
 
 Lightwheight JavaScript library that generates circular graphs in SVG.
+
+### Demo
+
+The demo lives [here](http://lugolabs.com/blog/2013/12/24/create-circular-svg-charts-with-circles).
 
 ### Usage
 
