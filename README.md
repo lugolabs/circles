@@ -72,7 +72,7 @@ Code and ideas borrowed by:
 
 Circles is licensed under the terms of the MIT License.
 
-### Change log
+### Changelog
 
 * 0.02 Add animation
 * 0.01 First release
