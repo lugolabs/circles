@@ -14,6 +14,8 @@
     text       - the text to display at the centre of the graph (optional, the percentage will show if not specified)
     colors     - an array of colors, with the first item coloring the full circle 
                  (optional, it will be `['#EEE', '#F00']` if not specified)
+    duration   - value in ms of animation duration; (optional, defaults to 500); 
+                 if `null` is passed, the animation will not run
 
 */
 
@@ -31,49 +33,122 @@
     this._text           = options.text   || this._percentage;
     this._strokeWidth    = options.width  || 10;
     this._colors         = options.colors || ['#EEE', '#F00'];
+    this._interval       = 16;
+    this._textClassName  = 'circles-text';
+    
+    this._confirmAnimation(options.duration);
 
     this._svgSize        = this._radius * 2;
     this._radiusAdjusted = this._radius - (this._strokeWidth / 2);
     this._start          = -Math.PI / 180 * 90;
     this._startPrecise   = this._precise(this._start);
     this._circ           = endAngleRad - this._start;
-
     this._el.innerHTML   = this._wrap(this._generateSvg() + this._generateText());
+
+    if (this._canAnimate) this._animate();
   };
 
   Circles.prototype = {
+    VERSION: '0.02',
+
+    _confirmAnimation: function(duration) {
+      if (duration === null) {
+        this._canAnimate = false;
+        return;
+      }
+
+      duration = duration || 500;
+
+      var step     = duration / this._interval,
+        pathFactor = this._percentage / step,
+        textFactor = this._text / step;
+
+      if (this._percentage <= (1 + pathFactor)) {
+        this._canAnimate = false;
+      } else {
+        this._canAnimate     = true;
+        this._pathFactor = pathFactor;
+        this._textFactor  = textFactor;
+      }
+    },
+
+    _animate: function() {
+      var i    = 1,
+        self   = this,
+        path   = this._el.getElementsByTagName('path')[1],
+        textEl = this._getTextElement(),
+
+        requestAnimFrame = window.requestAnimationFrame       ||
+                           window.webkitRequestAnimationFrame ||
+                           window.mozRequestAnimationFrame    ||
+                           window.oRequestAnimationFrame      ||
+                           window.msRequestAnimationFrame     ||
+                           function (callback) {
+                               setTimeout(callback, self._interval);
+                           },
+
+        animate = function() {
+          var percentage   = self._pathFactor * i,
+            nextPercentage = self._pathFactor * (i + 1),
+            text           = self._textFactor * i,
+            canContinue    = true;
+          if (nextPercentage > self._percentage) {
+            percentage  = self._percentage;
+            text        = self._text;
+            canContinue = false;
+          }
+          if (percentage > self._percentage) return;
+          path.setAttribute('d', self._calculatePath(percentage, true));
+          textEl.innerHTML = self._calculateText(text);
+          i++;
+          if (canContinue) requestAnimFrame(animate);
+        };
+
+      requestAnimFrame(animate);
+    },
+
+    _getTextElement: function() {
+      var divs = this._el.getElementsByTagName('div');
+      for (var i = 0, l = divs.length; i < l; i++) {
+        if (divs[i].className === this._textClassName) return divs[i];
+      }
+    },
+
     _wrap: function(content) {
       return '<div class="circles-wrp" style="position:relative; display:inline-block;">' + content + '</div>';
     },
 
     _generateText: function() {
-      var parts = (this._text + '').split('.'),
-        html = '<div class="circles-text" style="position:absolute; top:0; left:0; text-align:center; width:100%;' +
-          ' font-size:' + this._radius * .7 + 'px; height:' + this._svgSize + 'px; line-height:' + this._svgSize + 'px;">' + parts[0];
-        if (parts.length > 1) {
-          html += '.<span style="font-size:.4em">' + parts[1].substring(0, 2) + '</span>';
-        }
-        html += '</div>';
+      return  '<div class="' + this._textClassName + '" style="position:absolute; top:0; left:0; text-align:center; width:100%;' +
+        ' font-size:' + this._radius * .7 + 'px; height:' + this._svgSize + 'px; line-height:' + this._svgSize + 'px;">' + 
+        this._calculateText(this._canAnimate ? 0 : this._text) +
+      '</div>';
+    },
+
+    _calculateText: function(text) {
+      var parts = (text + '').split('.'),
+        html = parts[0];
+      if (parts.length > 1) {
+        html += '.<span style="font-size:.4em">' + parts[1].substring(0, 2) + '</span>';
+      }
       return html;
     },
 
     _generateSvg: function() {
       return '<svg width="' + this._svgSize + '" height="' + this._svgSize + '">' + 
         this._generatePath(100, false, this._colors[0]) + 
-        this._generatePath(this._percentage, true, this._colors[1]) + 
+        this._generatePath(this._canAnimate ? 1 : this._percentage, true, this._colors[1]) + 
       '</svg>';
     },
 
     _generatePath: function(percentage, open, color) {
-      var end      = this._start + ((percentage / 100) * this._circ),
-        endPrecise = this._precise(end),
-        d          = this._arc(endPrecise, open);
-
-      return '<path fill="transparent" stroke="' + color + '" stroke-width="' + this._strokeWidth + '" d="' + d + '"/>';
+      return '<path fill="transparent" stroke="' + color + '" stroke-width="' + this._strokeWidth + '" d="' + this._calculatePath(percentage, open) + '"/>';
     },
 
-    _precise: function(value) {
-      return Math.round(value * 1000) / 1000;
+    _calculatePath: function(percentage, open) {
+      var end      = this._start + ((percentage / 100) * this._circ),
+        endPrecise = this._precise(end);
+      return this._arc(endPrecise, open);
     },
 
     _arc: function(end, open) {
@@ -94,6 +169,10 @@
         this._radius + this._radiusAdjusted * Math.sin(endAdjusted),
         open ? '' : 'Z' // close
       ].join(' ');
+    },
+
+    _precise: function(value) {
+      return Math.round(value * 1000) / 1000;
     }
   };
 
