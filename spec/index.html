@@ -26,13 +26,14 @@
 		for (var i = 1; i <= 5; i++) {
 			var child = document.getElementById('circles-' + i),
 				percentage = 31.42 + (i * 9.84);
-
+				
 			Circles.create({
 				id:         child.id,
 				percentage: percentage,
 				radius:     60,
 				width:      10,
-				text:       percentage / 10,
+				number:   	percentage / 10,
+				text:       '%',
 				colors:     colors[i - 1]
 			});
 		}

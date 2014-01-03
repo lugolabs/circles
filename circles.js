@@ -11,7 +11,8 @@
     percentage - the percentage dictating the smaller circle
     radius     - the radius of the circles
     width      - the width of the ring (optional, has value 10, if not specified)
-    text       - the text to display at the centre of the graph (optional, the percentage will show if not specified)
+    number     - the number to display at the centre of the graph (optional, the percentage will show if not specified)
+    text       - the text to display after the number (optional, nothing will show if not specified)
     colors     - an array of colors, with the first item coloring the full circle 
                  (optional, it will be `['#EEE', '#F00']` if not specified)
     duration   - value in ms of animation duration; (optional, defaults to 500); 
@@ -30,11 +31,14 @@
 
     this._radius         = options.radius;
     this._percentage     = options.percentage;
-    this._text           = options.text   || this._percentage;
+    this._text           = options.text; // #3
+    this._number         = options.number || this._percentage;
     this._strokeWidth    = options.width  || 10;
     this._colors         = options.colors || ['#EEE', '#F00'];
     this._interval       = 16;
-    this._textClassName  = 'circles-text';
+    this._textWrpClass   = 'circles-text-wrp';
+    this._textClass      = 'circles-text';
+    this._numberClass    = 'circles-number';
     
     this._confirmAnimation(options.duration);
 
@@ -49,7 +53,7 @@
   };
 
   Circles.prototype = {
-    VERSION: '0.02',
+    VERSION: '0.0.3',
 
     _confirmAnimation: function(duration) {
       if (duration === null) {
@@ -61,22 +65,24 @@
 
       var step     = duration / this._interval,
         pathFactor = this._percentage / step,
-        textFactor = this._text / step;
+        numberFactor = this._number / step;
 
       if (this._percentage <= (1 + pathFactor)) {
         this._canAnimate = false;
       } else {
-        this._canAnimate     = true;
-        this._pathFactor = pathFactor;
-        this._textFactor  = textFactor;
+        this._canAnimate   = true;
+        this._pathFactor   = pathFactor;
+        this._numberFactor = numberFactor;
       }
     },
 
     _animate: function() {
-      var i    = 1,
-        self   = this,
-        path   = this._el.getElementsByTagName('path')[1],
-        textEl = this._getTextElement(),
+      var i      = 1,
+        self     = this,
+        path     = this._el.getElementsByTagName('path')[1],
+        numberEl = this._getNumberElement(),
+
+        isInt    = this._number % 1 === 0,
 
         requestAnimFrame = window.requestAnimationFrame       ||
                            window.webkitRequestAnimationFrame ||
@@ -90,16 +96,19 @@
         animate = function() {
           var percentage   = self._pathFactor * i,
             nextPercentage = self._pathFactor * (i + 1),
-            text           = self._textFactor * i,
+            number         = self._numberFactor * i,
             canContinue    = true;
+          if (isInt) {
+            number = Math.round(number);
+          }
           if (nextPercentage > self._percentage) {
             percentage  = self._percentage;
-            text        = self._text;
+            number      = self._number;
             canContinue = false;
           }
           if (percentage > self._percentage) return;
           path.setAttribute('d', self._calculatePath(percentage, true));
-          textEl.innerHTML = self._calculateText(text);
+          numberEl.innerHTML = self._calculateNumber(number);
           i++;
           if (canContinue) requestAnimFrame(animate);
         };
@@ -107,10 +116,10 @@
       requestAnimFrame(animate);
     },
 
-    _getTextElement: function() {
-      var divs = this._el.getElementsByTagName('div');
+    _getNumberElement: function() {
+      var divs = this._el.getElementsByTagName('span');
       for (var i = 0, l = divs.length; i < l; i++) {
-        if (divs[i].className === this._textClassName) return divs[i];
+        if (divs[i].className === this._numberClass) return divs[i];
       }
     },
 
@@ -119,19 +128,23 @@
     },
 
     _generateText: function() {
-      return  '<div class="' + this._textClassName + '" style="position:absolute; top:0; left:0; text-align:center; width:100%;' +
+      var html =  '<div class="' + this._textWrpClass + '" style="position:absolute; top:0; left:0; text-align:center; width:100%;' +
         ' font-size:' + this._radius * .7 + 'px; height:' + this._svgSize + 'px; line-height:' + this._svgSize + 'px;">' + 
-        this._calculateText(this._canAnimate ? 0 : this._text) +
-      '</div>';
+        this._calculateNumber(this._canAnimate ? 0 : this._number);
+      if (this._text) {
+        html += '<span class="' + this._textClass + '">' + this._text + '</span>';
+      }
+      html += '</div>';
+      return html;
     },
 
-    _calculateText: function(text) {
-      var parts = (text + '').split('.'),
-        html = parts[0];
+    _calculateNumber: function(number) {
+      var parts = (number + '').split('.'),
+        html = '<span class="' + this._numberClass + '">' + parts[0];
       if (parts.length > 1) {
         html += '.<span style="font-size:.4em">' + parts[1].substring(0, 2) + '</span>';
       }
-      return html;
+      return html + '</span>';
     },
 
     _generateSvg: function() {

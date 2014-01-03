@@ -28,7 +28,8 @@ where
 * `percentage` 	- the percentage dictating the smaller circle
 * `radius` 			- the radius of the circles
 * `width` 			- the width of the ring (optional, has value 10, if not specified)
-* `text` 				- the text to display at the centre of the graph (optional, the percentage will show if not specified)
+* `number`			- the number to display at the centre of the graph (optional, the percentage will show if not specified)
+* `text` 				- the text to display after the number (optional, nothing will show if not specified)
 * `colors` 			- an array of colors, with the first item coloring the full circle (optional, it will be `['#EEE', '#F00']` if not specified)
 * `duration` 		- value in ms of animation's duration; defaults to 500; if `null` is passed, the animation will not run.
 
@@ -38,8 +39,10 @@ The styles have been specified inline to avoid external dependencies. But they c
 
 To help with this, a few CSS classes have been exposed:
 
-* `circles-wrp` 	- the element containing the graph
-* `circles-text` 	- the element containing the text
+* `circles-wrp` 			- the element containing the graph
+* `circles-text-wrp` 	- the element wrapping the text and number
+* `circles-text` 			- the element containing the text
+* `circles-number` 		- the element containing the number
 
 ### Compatibility
 
@@ -74,5 +77,7 @@ Circles is licensed under the terms of the MIT License.
 
 ### Changelog
 
-* 0.02 Add animation
-* 0.01 First release
+* 0.0.3    Allow adding extra text to the graph (issue 3)
+           Round integers during animation
+* 0.0.2    Add animation
+* 0.0.1    First release
