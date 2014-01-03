@@ -79,7 +79,6 @@ Circles is licensed under the terms of the MIT License.
 ### Changelog
 
 * 0.0.3    Allow adding extra text to the graph (issue 3).
-
            Round integers during animation.
 * 0.0.2    Add animation.
 * 0.0.1    First release.
