@@ -16,7 +16,8 @@ Circles.create({
 	percentage: 43,
 	radius:     60,
 	width:      10,
-	text:       7.13,
+	number:     7.13,
+	text:       '%',
 	colors:     ['#D3B6C6', '#4B253A'],
 	duration: 	400
 })
