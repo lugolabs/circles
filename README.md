@@ -36,9 +36,9 @@ where
 
 ### API
 
-`js
+```js
 generate(radius)
-`js
+```
 
 Regenerates the circle with the given radius (see `spec/responsive.html` for an example on how to create a responsive circle).
 
