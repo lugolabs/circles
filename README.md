@@ -34,6 +34,15 @@ where
 * `colors` 			- an array of colors, with the first item coloring the full circle (optional, it will be `['#EEE', '#F00']` if not specified)
 * `duration` 		- value in ms of animation's duration; defaults to 500; if `null` is passed, the animation will not run.
 
+### API
+
+`js
+generate(radius)
+`js
+
+Regenerates the circle with the given radius (see `spec/responsive.html` for an example on how to create a responsive circle).
+
+
 ### Styles
 
 The styles have been specified inline to avoid external dependencies. But they can be overriden via CSS easily, being simply HTML elements.
@@ -78,6 +87,7 @@ Circles is licensed under the terms of the MIT License.
 
 ### Changelog
 
+* 0.0.4    Exposes `generate(radius)` to regenerate the circle, opening it to responsiveness.
 * 0.0.3    Allow adding extra text to the graph (issue 3).
            Round integers during animation.
 * 0.0.2    Add animation.

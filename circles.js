@@ -18,6 +18,9 @@
     duration   - value in ms of animation duration; (optional, defaults to 500); 
                  if `null` is passed, the animation will not run
 
+  API:
+    generate(radius) - regenerates the circle with the given radius (see spec/responsive.html for an example hot to create a responsive circle)
+
 */
 
 (function() {
@@ -27,7 +30,6 @@
     
     if (this._el === null) return;
     
-    var endAngleRad = Math.PI / 180 * 270;
 
     this._radius         = options.radius;
     this._percentage     = options.percentage;
@@ -42,18 +44,28 @@
     
     this._confirmAnimation(options.duration);
 
-    this._svgSize        = this._radius * 2;
-    this._radiusAdjusted = this._radius - (this._strokeWidth / 2);
+    var endAngleRad      = Math.PI / 180 * 270;
     this._start          = -Math.PI / 180 * 90;
     this._startPrecise   = this._precise(this._start);
     this._circ           = endAngleRad - this._start;
-    this._el.innerHTML   = this._wrap(this._generateSvg() + this._generateText());
+
+    this.generate();
 
     if (this._canAnimate) this._animate();
   };
 
   Circles.prototype = {
-    VERSION: '0.0.3',
+    VERSION: '0.0.4',
+
+    generate: function(radius) {
+      if (radius) {
+        this._radius = radius;
+        this._canAnimate = false;
+      }
+      this._svgSize        = this._radius * 2;
+      this._radiusAdjusted = this._radius - (this._strokeWidth / 2);
+      this._el.innerHTML   = this._wrap(this._generateSvg() + this._generateText());
+    },
 
     _confirmAnimation: function(duration) {
       if (duration === null) {
