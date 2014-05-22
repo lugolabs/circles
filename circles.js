@@ -20,11 +20,22 @@
 
   API:
     generate(radius) - regenerates the circle with the given radius (see spec/responsive.html for an example hot to create a responsive circle)
+    updatePercent(percent) - update and animate the percentage dictating the smaller circle
 
 */
 
 (function() {
-  var Circles = window.Circles = function(options) {
+  
+  var requestAnimFrame = window.requestAnimationFrame       ||
+			window.webkitRequestAnimationFrame ||
+			window.mozRequestAnimationFrame    ||
+			window.oRequestAnimationFrame      ||
+			window.msRequestAnimationFrame     ||
+			function (callback) {
+				setTimeout(callback, self._interval);
+			},
+  
+  Circles = window.Circles = function(options) {
     var elId = options.id;
     this._el = document.getElementById(elId);
     
@@ -87,6 +98,35 @@
         this._numberFactor = numberFactor;
       }
     },
+	
+	updatePercent:	function(percent)
+	{
+		if(this._percentage == percent || isNaN(percent))
+			return;
+
+		var self			=	this,
+			path    		=	self._el.getElementsByTagName('path')[1],
+			oldPercentage	=	self._percentage,
+			isGreater		=	percent > oldPercentage;
+
+		self._percentage	=	Math.min(100, Math.max(0, percent));
+
+		function animate() {
+			if(isGreater)
+				oldPercentage++;
+			else
+				oldPercentage--;
+
+			if ((isGreater && oldPercentage > self._percentage) || ( ! isGreater && oldPercentage < self._percentage))
+				return;
+
+			path.setAttribute('d', self._calculatePath(oldPercentage, true));
+
+			requestAnimFrame(animate);
+		}
+
+		requestAnimFrame(animate);
+	},
 
     _animate: function() {
       var i      = 1,
@@ -95,15 +135,6 @@
         numberEl = this._getNumberElement(),
 
         isInt    = this._number % 1 === 0,
-
-        requestAnimFrame = window.requestAnimationFrame       ||
-                           window.webkitRequestAnimationFrame ||
-                           window.mozRequestAnimationFrame    ||
-                           window.oRequestAnimationFrame      ||
-                           window.msRequestAnimationFrame     ||
-                           function (callback) {
-                               setTimeout(callback, self._interval);
-                           },
 
         animate = function() {
           var percentage   = self._pathFactor * i,
