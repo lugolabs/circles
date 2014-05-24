@@ -4,9 +4,16 @@
 
 Lightwheight JavaScript library that generates circular graphs in SVG. Now with animation.
 
+### Get Started
+
+1. Get the library
+2. Install all the dependencies, run `npm install`
+3. Once you have the dependencies installed, run `grunt` from the project directory. This will run the default grunt task which will minify `circles.js` to `circles.min.js`
+
+
 ### Usage
 
-Include the `circles.js` file in your HTML file. There are no dependencies.
+Include the `circles.js` or `circles.min.js` file in your HTML file. There are no dependencies.
 
 Create a graph by calling:
 
