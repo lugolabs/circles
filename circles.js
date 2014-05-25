@@ -26,21 +26,11 @@
 
 (function() {
   
-  var requestAnimFrame = window.requestAnimationFrame       ||
-			window.webkitRequestAnimationFrame ||
-			window.mozRequestAnimationFrame    ||
-			window.oRequestAnimationFrame      ||
-			window.msRequestAnimationFrame     ||
-			function (callback) {
-				setTimeout(callback, self._interval);
-			},
-  
-  Circles = window.Circles = function(options) {
-    var elId = options.id;
+  var Circles = window.Circles = function(options) {
+    var elId = options.id, self = this;
     this._el = document.getElementById(elId);
     
     if (this._el === null) return;
-    
 
     this._radius         = options.radius;
     this._percentage     = options.percentage;
@@ -52,6 +42,15 @@
     this._textWrpClass   = 'circles-text-wrp';
     this._textClass      = 'circles-text';
     this._numberClass    = 'circles-number';
+
+ 	this.requestAnimFrame = window.requestAnimationFrame       ||
+	  window.webkitRequestAnimationFrame ||
+	  window.mozRequestAnimationFrame    ||
+	  window.oRequestAnimationFrame      ||
+	  window.msRequestAnimationFrame     ||
+	  function (callback) {
+		  setTimeout(callback, self._interval);
+	  };
     
     this._confirmAnimation(options.duration);
 
@@ -122,10 +121,10 @@
 
 			path.setAttribute('d', self._calculatePath(oldPercentage, true));
 
-			requestAnimFrame(animate);
+			self.requestAnimFrame(animate);
 		}
 
-		requestAnimFrame(animate);
+		self.requestAnimFrame(animate);
 	},
 
     _animate: function() {
@@ -153,10 +152,10 @@
           path.setAttribute('d', self._calculatePath(percentage, true));
           numberEl.innerHTML = self._calculateNumber(number);
           i++;
-          if (canContinue) requestAnimFrame(animate);
+          if (canContinue) self.requestAnimFrame(animate);
         };
 
-      requestAnimFrame(animate);
+      self.requestAnimFrame(animate);
     },
 
     _getNumberElement: function() {
