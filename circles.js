@@ -57,6 +57,7 @@
     this._colors         = options.colors || ['#EEE', '#F00'];
     this._interval       = 16;
 	this._svg            = null;
+	this._movingPath     = null;
 	this._wrapContainer  = null;
     this._textContainer  = null;
     //this._textClass      = 'circles-text';
@@ -133,9 +134,7 @@
 	{
 		if(value === true) //Force update with current value
 		{
-			var percent	=	this.getPercent();
-			this._el.getElementsByTagName('path')[1].setAttribute('d', this._calculatePath(percent, true));
-			this._textContainer.innerHTML	=	this._getText(this._value);
+			this._setPercentage(this.getPercent());
 			return this;
 		}
 
@@ -143,27 +142,31 @@
 		if(this._value == value || isNaN(value))
 			return this;
 
-		var self			=	this,
-			path    		=	self._el.getElementsByTagName('path')[1],
-			oldPercentage	=	self.getPercent(),
+		var self          = this,
+			oldPercentage = self.getPercent(),
+			delta         = 1,
 			newPercentage, isGreater;
 
-		this._value	=	Math.min(this._maxValue, Math.max(0, value));
+		this._value     = Math.min(this._maxValue, Math.max(0, value));
 
-		newPercentage	=	self.getPercent();
-		isGreater		=	newPercentage > oldPercentage;
+		newPercentage   = self.getPercent();
+		isGreater       = newPercentage > oldPercentage;
+
+		delta           += newPercentage % 1; //If new percentage is not an integer, we add the decimal part to the delta
 
 		function animate() {
 			if(isGreater)
-				oldPercentage++;
+				oldPercentage += delta;
 			else
-				oldPercentage--;
+				oldPercentage -= delta;
 
 			if ((isGreater && oldPercentage > newPercentage) || ( ! isGreater && oldPercentage < newPercentage))
+			{
+				self._setPercentage(newPercentage);
 				return;
+			}
 
-			path.setAttribute('d', self._calculatePath(oldPercentage, true));
-			self._textContainer.innerHTML	=	self._getText(self.getValueFromPercent(oldPercentage));
+			self._setPercentage(oldPercentage);
 
 			requestAnimFrame(self)(animate);
 		}
@@ -172,6 +175,12 @@
 
 		return this;
 	},
+
+    _setPercentage: function(percentage)
+    {
+		this._movingPath.setAttribute('d', this._calculatePath(percentage, true));
+		this._textContainer.innerHTML	=	this._getText(this.getValueFromPercent(percentage));
+    },
 
     /*_animate: function() {
       var i      = 1,
@@ -259,6 +268,8 @@
 
 	  this._svg.innerHTML = this._generatePath(100, false, this._colors[0]) +
 		                    this._generatePath(1, true, this._colors[1]);
+
+	  this._movingPath = this._svg.getElementsByTagName('path')[1];
 
 	  return this;
     },
