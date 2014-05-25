@@ -46,9 +46,13 @@
 
 
     this._radius         = options.radius;
-    this._percentage     = options.percentage;
+
+	this._value          = options.value || 0;
+  	this._max_value      = options.max_value || 100;
+
+  	//this._percentage     = options.percentage;
     this._text           = options.text; // #3
-    this._number         = options.number || this._percentage;
+    //this._number         = options.number || this._percentage;
     this._strokeWidth    = options.width  || 10;
     this._colors         = options.colors || ['#EEE', '#F00'];
     this._interval       = 16;
@@ -90,10 +94,11 @@
       duration = duration || 500;
 
       var step     = duration / this._interval,
-        pathFactor = this._percentage / step,
-        numberFactor = this._number / step;
+		percent = this.getPercent(),
+        pathFactor = percentage / step,
+        numberFactor = this._value / step;
 
-      if (this._percentage <= (1 + pathFactor)) {
+      if (percent <= (1 + pathFactor)) {
         this._canAnimate = false;
       } else {
         this._canAnimate   = true;
@@ -101,8 +106,13 @@
         this._numberFactor = numberFactor;
       }
     },
+
+	getPercent: function()
+	{
+		return (this._value * 100) / this._max_value;
+	},
 	
-	updatePercent:	function(percent)
+	updatePercent: function(percent)
 	{
 		if(this._percentage == percent || isNaN(percent))
 			return;
@@ -136,23 +146,25 @@
         self     = this,
         path     = this._el.getElementsByTagName('path')[1],
         numberEl = this._getNumberElement(),
+		percent  = self.getPercent(),
 
-        isInt    = this._number % 1 === 0,
+        isInt    = this._value % 1 === 0,
 
         animate = function() {
           var percentage   = self._pathFactor * i,
             nextPercentage = self._pathFactor * (i + 1),
             number         = self._numberFactor * i,
             canContinue    = true;
+
           if (isInt) {
             number = Math.round(number);
           }
-          if (nextPercentage > self._percentage) {
-            percentage  = self._percentage;
-            number      = self._number;
+          if (nextPercentage > percent) {
+            percentage  = percent;
+            number      = self._value;
             canContinue = false;
           }
-          if (percentage > self._percentage) return;
+          if (percentage > percent) return;
           path.setAttribute('d', self._calculatePath(percentage, true));
           numberEl.innerHTML = self._calculateNumber(number);
           i++;
@@ -176,7 +188,7 @@
     _generateText: function() {
       var html =  '<div class="' + this._textWrpClass + '" style="position:absolute; top:0; left:0; text-align:center; width:100%;' +
         ' font-size:' + this._radius * .7 + 'px; height:' + this._svgSize + 'px; line-height:' + this._svgSize + 'px;">' + 
-        this._calculateNumber(this._canAnimate ? 0 : this._number);
+        this._calculateNumber(this._canAnimate ? 0 : this._value);
       if (this._text) {
         html += '<span class="' + this._textClass + '">' + this._text + '</span>';
       }
@@ -196,7 +208,7 @@
     _generateSvg: function() {
       return '<svg width="' + this._svgSize + '" height="' + this._svgSize + '">' + 
         this._generatePath(100, false, this._colors[0]) + 
-        this._generatePath(this._canAnimate ? 1 : this._percentage, true, this._colors[1]) + 
+        this._generatePath(this._canAnimate ? 1 : this.getPercent(), true, this._colors[1]) +
       '</svg>';
     },
 

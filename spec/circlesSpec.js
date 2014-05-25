@@ -24,7 +24,7 @@ describe('Circles', function() {
 		it("generates the SVG without animation", function() {
 			Circles.create({
 				id: element.id,
-				percentage: 40,
+				value: 40,
 				radius: 60,
 				duration: null
 			});
@@ -35,7 +35,7 @@ describe('Circles', function() {
 		it("generates the SVG with animation", function() {
 			Circles.create({
 				id: element.id,
-				percentage: 40,
+				value: 40,
 				radius: 60
 			});
 			var expected = '<div class="circles-wrp" style="position:relative; display:inline-block;"><svg width="120" height="120"><path fill="transparent" stroke="#EEE" stroke-width="10" d="M 59.988797973796764 5.000001140776334 A 55 55 0 1 1 59.923606103406065 5.0000530548205475 Z"></path><path fill="transparent" stroke="#F00" stroke-width="10" d="M 59.988797973796764 5.000001140776334 A 55 55 0 0 1 63.39663517303477 5.104983199735706 "></path></svg><div class="circles-text-wrp" style="position:absolute; top:0; left:0; text-align:center; width:100%; font-size:42px; height:120px; line-height:120px;"><span class="circles-number">0</span></div></div>';
@@ -45,7 +45,7 @@ describe('Circles', function() {
 		it("adds the supplied text", function() {
 			Circles.create({
 				id: element.id,
-				percentage: 40,
+				value: 40,
 				radius: 60,
 				text: '%'
 			});
