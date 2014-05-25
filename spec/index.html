@@ -32,8 +32,7 @@
 				value:		percentage,
 				radius:     60,
 				width:      10,
-				//number:   	percentage / 10,
-				text:       '%',
+				text:       function(value){return value + '%'},
 				colors:     colors[i - 1]
 			});
 		}

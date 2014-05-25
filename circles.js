@@ -51,7 +51,7 @@
   	this._max_value      = options.max_value || 100;
 
   	//this._percentage     = options.percentage;
-    this._text           = options.text;// || function(value){return value;};
+    this._text           = options.text === undefined ? function(value){return value;} : options.text;
     //this._number         = options.number || this._percentage;
     this._strokeWidth    = options.width  || 10;
     this._colors         = options.colors || ['#EEE', '#F00'];
@@ -171,7 +171,7 @@
           }
           if (percentage > percent) return;
           path.setAttribute('d', self._calculatePath(percentage, true));
-          numberEl.innerHTML = self._calculateNumber(number);
+          numberEl.innerHTML = self._getText(number);
           i++;
           if (canContinue) requestAnimFrame(self)(animate);
         };
@@ -208,19 +208,20 @@
 		for(var prop in style)
 			this._textContainer.style[prop]	=	style[prop];
 
-		this._textContainer.innerHTML	=	this._calculateNumber(this._canAnimate ? 0 : this._value);
+		this._textContainer.innerHTML	=	this._getText(this._canAnimate ? 0 : this._value);
 
 		return this;
     },
 
-    _calculateNumber: function(number) {
-      var parts = (number + '').split('.'),
-        html = '<span >' + parts[0];
-      if (parts.length > 1) {
-        html += '.<span style="font-size:.4em">' + parts[1].substring(0, 2) + '</span>';
-      }
-      return html + '</span>';
-    },
+	_getText: function(value)
+	{
+		if(value === undefined)
+			value = this._value;
+
+		value = parseFloat(value.toFixed(2));
+
+		return typeof this._text === 'function' ? this._text(value) : this._text;
+	},
 
     _generateSvg: function() {
 
