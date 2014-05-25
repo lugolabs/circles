@@ -65,6 +65,9 @@
 	this._wrapContainer  = null;
     this._textContainer  = null;
 
+	this._textWrpClass   = 'circles-text-wrp';
+	this._textClass      = options.textClass || 'circles-text';
+
     var endAngleRad      = Math.PI / 180 * 270;
     this._start          = -Math.PI / 180 * 90;
     this._startPrecise   = this._precise(this._start);
@@ -97,6 +100,7 @@
 
     _generateWrapper: function() {
       	this._wrapContainer	=	document.createElement('div');
+		this._wrapContainer.className = this._textWrpClass;
 		this._wrapContainer.style.position	=	'relative';
 		this._wrapContainer.style.display	=	'inline-block';
 
@@ -109,6 +113,7 @@
     _generateText: function() {
 
 		this._textContainer = document.createElement('div');
+		this._textContainer.className = this._textClass;
 
 		var style	=	{
 			position: 'absolute',
@@ -188,6 +193,22 @@
       return Math.round(value * 1000) / 1000;
     },
 
+	/*== Public methods ==*/
+
+	htmlifyNumber: function(number, integerPartClass, decimalPartClass) {
+
+		integerPartClass = integerPartClass || 'circles-integer';
+		decimalPartClass = decimalPartClass || 'circles-decimals';
+
+		var parts = (number + '').split('.'),
+		    html  = '<span class="' + integerPartClass + '">' + parts[0];
+
+		if (parts.length > 1) {
+            html += '.<span class="' + decimalPartClass + '">' + parts[1].substring(0, 2) + '</span>';
+        }
+		return html + '</span>';
+	},
+
 	updateRadius: function(radius)
 	{
 	    this._radius = radius;
@@ -204,8 +225,6 @@
 	{
 	    return (this._maxValue * percentage) / 100;
 	},
-
-	/*== Public methods ==*/
 
 	update: function(value, duration)
 	{
@@ -257,7 +276,7 @@
 
 		  requestAnimFrame(function(){self._setPercentage(oldPercentage);});
 
-		  var now       = new Date().getTime(),
+		  var now       = Date.now(),
 			  deltaTime = now - lastFrame;
 
 		  if(deltaTime >= stepDuration)
@@ -266,11 +285,11 @@
 		  {
 			  window.setTimeout(function()
 			  {
-				 animate(new Date().getTime());
+				 animate(Date.now());
 			  }, stepDuration - deltaTime);
 		  }
 
-	  })(new Date().getTime());
+	  })(Date.now());
 
 	  return this;
 	}

@@ -6,6 +6,10 @@
 			display: inline-block;
 			margin: 1em;
 		}
+
+		.circles-decimals {
+			font-size: .4em;
+		}
 	</style>
 </head>
 <body>
@@ -33,7 +37,7 @@
 					value:      percentage,
 					radius:     getWidth(),
 					width:      10,
-					//text:       '%',
+					text:       function(value){return this.htmlifyNumber(value);},
 					colors:     colors[i - 1]
 				});
 
