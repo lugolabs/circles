@@ -51,14 +51,16 @@
   	this._max_value      = options.max_value || 100;
 
   	//this._percentage     = options.percentage;
-    this._text           = options.text; // #3
+    this._text           = options.text;// || function(value){return value;};
     //this._number         = options.number || this._percentage;
     this._strokeWidth    = options.width  || 10;
     this._colors         = options.colors || ['#EEE', '#F00'];
     this._interval       = 16;
-    this._textWrpClass   = 'circles-text-wrp';
-    this._textClass      = 'circles-text';
-    this._numberClass    = 'circles-number';
+	this._svg            = null;
+	this._wrapContainer  = null;
+    this._textContainer  = null;
+    //this._textClass      = 'circles-text';
+    //this._numberClass    = 'circles-number';
 
     this._confirmAnimation(options.duration);
 
@@ -73,7 +75,7 @@
   };
 
   Circles.prototype = {
-    VERSION: '0.0.4',
+    VERSION: '0.0.5',
 
     generate: function(radius) {
       if (radius) {
@@ -82,7 +84,10 @@
       }
       this._svgSize        = this._radius * 2;
       this._radiusAdjusted = this._radius - (this._strokeWidth / 2);
-      this._el.innerHTML   = this._wrap(this._generateSvg() + this._generateText());
+
+	  this._generateSvg()._generateText()._generateWrapper();
+
+      this._el.appendChild(this._wrapContainer);
     },
 
     _confirmAnimation: function(duration) {
@@ -145,7 +150,7 @@
       var i      = 1,
         self     = this,
         path     = this._el.getElementsByTagName('path')[1],
-        numberEl = this._getNumberElement(),
+        numberEl = this._textContainer,
 		percent  = self.getPercent(),
 
         isInt    = this._value % 1 === 0,
@@ -174,31 +179,43 @@
       requestAnimFrame(self)(animate);
     },
 
-    _getNumberElement: function() {
-      var divs = this._el.getElementsByTagName('span');
-      for (var i = 0, l = divs.length; i < l; i++) {
-        if (divs[i].className === this._numberClass) return divs[i];
-      }
-    },
+    _generateWrapper: function() {
+      	this._wrapContainer	=	document.createElement('div');
+		this._wrapContainer.style.position	=	'relative';
+		this._wrapContainer.style.display	=	'inline-block';
 
-    _wrap: function(content) {
-      return '<div class="circles-wrp" style="position:relative; display:inline-block;">' + content + '</div>';
+		this._wrapContainer.appendChild(this._svg);
+		this._wrapContainer.appendChild(this._textContainer);
+
+		return this;
     },
 
     _generateText: function() {
-      var html =  '<div class="' + this._textWrpClass + '" style="position:absolute; top:0; left:0; text-align:center; width:100%;' +
-        ' font-size:' + this._radius * .7 + 'px; height:' + this._svgSize + 'px; line-height:' + this._svgSize + 'px;">' + 
-        this._calculateNumber(this._canAnimate ? 0 : this._value);
-      if (this._text) {
-        html += '<span class="' + this._textClass + '">' + this._text + '</span>';
-      }
-      html += '</div>';
-      return html;
+
+		this._textContainer = document.createElement('div');
+
+		var style	=	{
+			position: 'absolute',
+			top: 0,
+			left: 0,
+			textAlign: 'center',
+			width: '100%',
+			fontSize: (this._radius * .7) + 'px',
+			height: this._svgSize + 'px',
+			lineHeight: this._svgSize + 'px'
+		};
+
+		for(var prop in style)
+			this._textContainer.style[prop]	=	style[prop];
+
+		this._textContainer.innerHTML	=	this._calculateNumber(this._canAnimate ? 0 : this._value);
+
+		return this;
     },
 
     _calculateNumber: function(number) {
       var parts = (number + '').split('.'),
-        html = '<span class="' + this._numberClass + '">' + parts[0];
+        html = '<span >' + parts[0];
       if (parts.length > 1) {
         html += '.<span style="font-size:.4em">' + parts[1].substring(0, 2) + '</span>';
       }
@@ -206,10 +223,16 @@
     },
 
     _generateSvg: function() {
-      return '<svg width="' + this._svgSize + '" height="' + this._svgSize + '">' + 
-        this._generatePath(100, false, this._colors[0]) + 
-        this._generatePath(this._canAnimate ? 1 : this.getPercent(), true, this._colors[1]) +
-      '</svg>';
+
+	  this._svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+	  this._svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+	  this._svg.setAttribute('width', this._svgSize);
+	  this._svg.setAttribute('height', this._svgSize);
+
+	  this._svg.innerHTML = this._generatePath(100, false, this._colors[0]) +
+		                    this._generatePath(this._canAnimate ? 1 : this.getPercent(), true, this._colors[1]);
+
+	  return this;
     },
 
     _generatePath: function(percentage, open, color) {
