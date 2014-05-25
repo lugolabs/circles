@@ -21,6 +21,8 @@
   API:
     updateRadius(radius) - regenerates the circle with the given radius (see spec/responsive.html for an example hot to create a responsive circle)
     update(value) - update value of circle. If value is set to true, force the update of displaying
+    getPercent() - returns the percentage value of the circle, based on its current value and its max value
+ 	getValueFromPercent(percentage) - returns the corresponding value of the circle based on its max value and given percentage
 
 */
 
@@ -50,9 +52,7 @@
 	this._value          = 0;
   	this._maxValue       = options.maxValue || 100;
 
-  	//this._percentage     = options.percentage;
     this._text           = options.text === undefined ? function(value){return value;} : options.text;
-    //this._number         = options.number || this._percentage;
     this._strokeWidth    = options.width  || 10;
     this._colors         = options.colors || ['#EEE', '#F00'];
     this._interval       = 16;
@@ -60,25 +60,19 @@
 	this._movingPath     = null;
 	this._wrapContainer  = null;
     this._textContainer  = null;
-    //this._textClass      = 'circles-text';
-    //this._numberClass    = 'circles-number';
-
-    //this._confirmAnimation(options.duration);
 
     var endAngleRad      = Math.PI / 180 * 270;
     this._start          = -Math.PI / 180 * 90;
     this._startPrecise   = this._precise(this._start);
     this._circ           = endAngleRad - this._start;
 
-    this.generate().update(options.value || 0);
-
-    //if (this._canAnimate) this._animate();
+    this._generate().update(options.value || 0);
   };
 
   Circles.prototype = {
     VERSION: '0.0.5',
 
-    generate: function() {
+    _generate: function() {
 
       this._svgSize        = this._radius * 2;
       this._radiusAdjusted = this._radius - (this._strokeWidth / 2);
@@ -91,129 +85,11 @@
 	  return this;
     },
 
-	updateRadius: function(radius)
-	{
-		this._radius = radius;
-
-		return this.generate().update(true);
-	},
-
-    /*_confirmAnimation: function(duration) {
-      if (duration === null) {
-        this._canAnimate = false;
-        return;
-      }
-
-      duration = duration || 500;
-
-      var step     = duration / this._interval,
-		percent = this.getPercent(),
-        pathFactor = percentage / step,
-        numberFactor = this._value / step;
-
-      if (percent <= (1 + pathFactor)) {
-        this._canAnimate = false;
-      } else {
-        this._canAnimate   = true;
-        this._pathFactor   = pathFactor;
-        this._numberFactor = numberFactor;
-      }
-    },*/
-
-	getPercent: function()
-	{
-		return (this._value * 100) / this._maxValue;
-	},
-
-	getValueFromPercent: function(percentage)
-	{
-		return (this._maxValue * percentage) / 100;
-	},
-	
-	update: function(value)
-	{
-		if(value === true) //Force update with current value
-		{
-			this._setPercentage(this.getPercent());
-			return this;
-		}
-
-		//Else update with new value
-		if(this._value == value || isNaN(value))
-			return this;
-
-		var self          = this,
-			oldPercentage = self.getPercent(),
-			delta         = 1,
-			newPercentage, isGreater;
-
-		this._value     = Math.min(this._maxValue, Math.max(0, value));
-
-		newPercentage   = self.getPercent();
-		isGreater       = newPercentage > oldPercentage;
-
-		delta           += newPercentage % 1; //If new percentage is not an integer, we add the decimal part to the delta
-
-		function animate() {
-			if(isGreater)
-				oldPercentage += delta;
-			else
-				oldPercentage -= delta;
-
-			if ((isGreater && oldPercentage > newPercentage) || ( ! isGreater && oldPercentage < newPercentage))
-			{
-				self._setPercentage(newPercentage);
-				return;
-			}
-
-			self._setPercentage(oldPercentage);
-
-			requestAnimFrame(self)(animate);
-		}
-
-		requestAnimFrame(self)(animate);
-
-		return this;
-	},
-
     _setPercentage: function(percentage)
     {
 		this._movingPath.setAttribute('d', this._calculatePath(percentage, true));
 		this._textContainer.innerHTML	=	this._getText(this.getValueFromPercent(percentage));
     },
-
-    /*_animate: function() {
-      var i      = 1,
-        self     = this,
-        path     = this._el.getElementsByTagName('path')[1],
-        numberEl = this._textContainer,
-		percent  = self.getPercent(),
-
-        isInt    = this._value % 1 === 0,
-
-        animate = function() {
-          var percentage   = self._pathFactor * i,
-            nextPercentage = self._pathFactor * (i + 1),
-            number         = self._numberFactor * i,
-            canContinue    = true;
-
-          if (isInt) {
-            number = Math.round(number);
-          }
-          if (nextPercentage > percent) {
-            percentage  = percent;
-            number      = self._value;
-            canContinue = false;
-          }
-          if (percentage > percent) return;
-          path.setAttribute('d', self._calculatePath(percentage, true));
-          numberEl.innerHTML = self._getText(number);
-          i++;
-          if (canContinue) requestAnimFrame(self)(animate);
-        };
-
-      requestAnimFrame(self)(animate);
-    },*/
 
     _generateWrapper: function() {
       	this._wrapContainer	=	document.createElement('div');
@@ -306,7 +182,72 @@
 
     _precise: function(value) {
       return Math.round(value * 1000) / 1000;
-    }
+    },
+
+	updateRadius: function(radius)
+	{
+	    this._radius = radius;
+
+		return this._generate().update(true);
+	},
+
+	getPercent: function()
+	{
+	    return (this._value * 100) / this._maxValue;
+	},
+
+	getValueFromPercent: function(percentage)
+	{
+	    return (this._maxValue * percentage) / 100;
+	},
+
+	/*== Public methods ==*/
+
+	update: function(value)
+	{
+	  if(value === true) //Force update with current value
+	  {
+		  this._setPercentage(this.getPercent());
+		  return this;
+	  }
+
+	  //Else update with new value
+	  if(this._value == value || isNaN(value))
+		  return this;
+
+	  var self          = this,
+		  oldPercentage = self.getPercent(),
+		  delta         = 1,
+		  newPercentage, isGreater;
+
+	  this._value     = Math.min(this._maxValue, Math.max(0, value));
+
+	  newPercentage   = self.getPercent();
+	  isGreater       = newPercentage > oldPercentage;
+
+	  delta           += newPercentage % 1; //If new percentage is not an integer, we add the decimal part to the delta
+
+	  function animate() {
+		  if(isGreater)
+			  oldPercentage += delta;
+		  else
+			  oldPercentage -= delta;
+
+		  if ((isGreater && oldPercentage > newPercentage) || ( ! isGreater && oldPercentage < newPercentage))
+		  {
+			  self._setPercentage(newPercentage);
+			  return;
+		  }
+
+		  self._setPercentage(oldPercentage);
+
+		  requestAnimFrame(self)(animate);
+	  }
+
+	  requestAnimFrame(self)(animate);
+
+	  return this;
+	}
   };
 
   Circles.create = function(options) {
