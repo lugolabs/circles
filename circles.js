@@ -8,15 +8,23 @@
   Call Circles.create(options) with the following options:
 
     id         - the DOM element that will hold the graph
-    percentage - the percentage dictating the smaller circle
     radius     - the radius of the circles
     width      - the width of the ring (optional, has value 10, if not specified)
-    number     - the number to display at the centre of the graph (optional, the percentage will show if not specified)
-    text       - the text to display after the number (optional, nothing will show if not specified)
-    colors     - an array of colors, with the first item coloring the full circle 
+    value      - init value of the circle (optional, defaults to 0)
+    maxValue   - maximum value of the circle (optional, defaults to 100)
+    text       - the text to display at the centre of the graph (optional, the current value will be shown if not specified)
+                 if `null` or an empty string, no text will be displayed
+                 can also be a function: the returned value will be the displayed text
+                     ex1. function(currentValue) {
+                              return '$'+currentValue;
+                          }
+                     ex2.  function() {
+                               return this.getPercent() + '%';
+                           }
+    colors     - an array of colors, with the first item coloring the full circle
                  (optional, it will be `['#EEE', '#F00']` if not specified)
     duration   - value in ms of animation duration; (optional, defaults to 500); 
-                 if `null` is passed, the animation will not run
+                 if 0 or `null` is passed, the animation will not run
 
   API:
     updateRadius(radius) - regenerates the circle with the given radius (see spec/responsive.html for an example hot to create a responsive circle)
@@ -28,17 +36,14 @@
 
 (function() {
   
-  var requestAnimFrame = function(circle)
-  {
-	  return  window.requestAnimationFrame       ||
-		  window.webkitRequestAnimationFrame ||
-		  window.mozRequestAnimationFrame    ||
-		  window.oRequestAnimationFrame      ||
-		  window.msRequestAnimationFrame     ||
-		  function (callback) {
-			  setTimeout(callback, circle._interval);
-		  }
-  },
+  var requestAnimFrame = window.requestAnimationFrame       ||
+		                 window.webkitRequestAnimationFrame ||
+		                 window.mozRequestAnimationFrame    ||
+		                 window.oRequestAnimationFrame      ||
+		                 window.msRequestAnimationFrame     ||
+		                 function (callback) {
+			                 setTimeout(callback, 1000 / 60);
+		                 },
 
   Circles = window.Circles = function(options) {
     var elId = options.id;
@@ -46,8 +51,8 @@
 
     if (this._el === null) return;
 
-
     this._radius         = options.radius;
+	this._duration       = options.duration === undefined ? 500 : options.duration;
 
 	this._value          = 0;
   	this._maxValue       = options.maxValue || 100;
@@ -55,7 +60,6 @@
     this._text           = options.text === undefined ? function(value){return value;} : options.text;
     this._strokeWidth    = options.width  || 10;
     this._colors         = options.colors || ['#EEE', '#F00'];
-    this._interval       = 16;
 	this._svg            = null;
 	this._movingPath     = null;
 	this._wrapContainer  = null;
@@ -203,7 +207,7 @@
 
 	/*== Public methods ==*/
 
-	update: function(value)
+	update: function(value, duration)
 	{
 	  if(value === true) //Force update with current value
 	  {
@@ -215,36 +219,58 @@
 	  if(this._value == value || isNaN(value))
 		  return this;
 
+	  duration          = duration === undefined ? this._duration : duration;
+
 	  var self          = this,
 		  oldPercentage = self.getPercent(),
 		  delta         = 1,
-		  newPercentage, isGreater;
+		  newPercentage, isGreater, steps, stepDuration;
 
 	  this._value     = Math.min(this._maxValue, Math.max(0, value));
+
+	  if( ! duration) //No duration, we can't skip the animation
+	  {
+		  this._setPercentage(this.getPercent());
+		  return this;
+	  }
 
 	  newPercentage   = self.getPercent();
 	  isGreater       = newPercentage > oldPercentage;
 
 	  delta           += newPercentage % 1; //If new percentage is not an integer, we add the decimal part to the delta
+	  steps           = Math.floor(Math.abs(newPercentage - oldPercentage) / delta);
+	  stepDuration    = duration / steps;
 
-	  function animate() {
-		  if(isGreater)
-			  oldPercentage += delta;
-		  else
-			  oldPercentage -= delta;
 
-		  if ((isGreater && oldPercentage > newPercentage) || ( ! isGreater && oldPercentage < newPercentage))
-		  {
-			  self._setPercentage(newPercentage);
-			  return;
+	  (function animate(lastFrame)
+	  {
+	      if(isGreater)
+			oldPercentage += delta;
+	      else
+			oldPercentage -= delta;
+
+	      if ((isGreater && oldPercentage >= newPercentage) || ( ! isGreater && oldPercentage <= newPercentage))
+	      {
+			requestAnimFrame(function(){self._setPercentage(newPercentage);});
+			return;
 		  }
 
-		  self._setPercentage(oldPercentage);
+		  requestAnimFrame(function(){self._setPercentage(oldPercentage);});
 
-		  requestAnimFrame(self)(animate);
-	  }
+		  var now       = new Date().getTime(),
+			  deltaTime = now - lastFrame;
 
-	  requestAnimFrame(self)(animate);
+		  if(deltaTime >= stepDuration)
+			  animate(now);
+		  else
+		  {
+			  window.setTimeout(function()
+			  {
+				 animate(new Date().getTime());
+			  }, stepDuration - deltaTime);
+		  }
+
+	  })(new Date().getTime());
 
 	  return this;
 	}
