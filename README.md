@@ -11,37 +11,95 @@ Include the `circles.js` file in your HTML file. There are no dependencies.
 Create a graph by calling:
 
 ```js
-Circles.create({
+var myCircle = Circles.create({
 	id:         'circles-1',
-	percentage: 43,
 	radius:     60,
+	value:      43,
+	maxValue:   100,
 	width:      10,
-	number:     7.13,
-	text:       '%',
+	text:       function(value){return value + '%';},
 	colors:     ['#D3B6C6', '#4B253A'],
-	duration: 	400
+	duration: 	400,
+	wrpClass:	'circles-wrp',
+	textClass:	'circles-text'
 })
 ```
 
 where
 
-* `id` 					- the DOM element that will hold the graph
-* `percentage` 	- the percentage dictating the smaller circle
-* `radius` 			- the radius of the circles
-* `width` 			- the width of the ring (optional, has value 10, if not specified)
-* `number`			- the number to display at the centre of the graph (optional, the percentage will show if not specified)
-* `text` 				- the text to display after the number (optional, nothing will show if not specified)
-* `colors` 			- an array of colors, with the first item coloring the full circle (optional, it will be `['#EEE', '#F00']` if not specified)
-* `duration` 		- value in ms of animation's duration; defaults to 500; if `null` is passed, the animation will not run.
+* `id` 			- the DOM element that will hold the graph
+* `radius` 		- the radius of the circles
+* `value` 		- init value of the circle (optional, defaults to 0)
+* `maxValue` 	- maximum value of the circle (optional, defaults to 100)
+* `width` 		- the width of the ring (optional, has value 10, if not specified)
+* `number`		- the number to display at the centre of the graph (optional, the percentage will show if not specified)
+* `text` 		- the text to display at the centre of the graph (optional, the current "htmlified" value will be shown if not specified)
+                	if `null` or an empty string, no text will be displayed
+                    can also be a function: the returned value will be the displayed text
+						 ex1. function(currentValue) {
+								  return '$'+currentValue;
+							  }
+						 ex2.  function() {
+								   return this.getPercent() + '%';
+							   }
+* `colors` 		- an array of colors, with the first item coloring the full circle (optional, it will be `['#EEE', '#F00']` if not specified)
+* `duration` 	- value in ms of animation's duration; defaults to 500; if 0 or `null` is passed, the animation will not run.
+* `wrpClass` 	- class name to apply on the generated element wrapping the whole circle.
+* `textClass` 	- class name to apply on the generated element wrapping the text content.
 
 ### API
 
 ```js
-generate(radius)
+myCircle.updateRadius(Number radius)
 ```
 
-Regenerates the circle with the given radius (see `spec/responsive.html` for an example on how to create a responsive circle).
+Regenerates the circle with the given `radius` (see `spec/responsive.html` for an example on how to create a responsive circle).
 
+```js
+myCircle.updateWidth(Number width)
+```
+
+Regenerates the circle with the given `width`
+
+```js
+myCircle.updateColors(Array colors)
+```
+
+Change `colors` used to draw the circle.
+
+```js
+myCircle.update(Number value [, Number duration])
+```
+
+Set the value of the circle to `value`.
+Animation will take `duration` ms to execute. If no `duration` is given, default duration set in constructor will be used.
+If you don't want animation, set `duration` to 0.
+
+```js
+myCircle.update(Boolean force)
+```
+
+Force the redrawing of the circle if `force` is set to **true**. Do nothing otherwise.
+
+```js
+myCircle.getPercent()
+```
+
+Returns the percentage value of the circle, based on its current value and its max value.
+
+```js
+myCircle.getValueFromPercent(Number percentage)
+```
+
+Returns the corresponding value of the circle based on its max value and given `percentage`.
+
+```js
+myCircle.htmlifyNumber(number[, integerPartClass, decimalPartClass])
+```
+
+Returned HTML representation of given `number` with given classes names applied on tags.
+Default value of `integerPartClass` is **circles-integer**.
+Default value of `decimalPartClass` is **circles-decimals**.
 
 ### Styles
 
@@ -49,10 +107,10 @@ The styles have been specified inline to avoid external dependencies. But they c
 
 To help with this, a few CSS classes have been exposed:
 
-* `circles-wrp` 			- the element containing the graph
-* `circles-text-wrp` 	- the element wrapping the text and number
-* `circles-text` 			- the element containing the text
-* `circles-number` 		- the element containing the number
+* `circles-wrp` 	- the element wrapping the whole circle
+* `circles-text` 	- the element wrapping text content
+
+You can overwritte these classes by sending properties `wrpClass` and/or `textClass` to the constructor.
 
 ### Compatibility
 
@@ -87,6 +145,7 @@ Circles is licensed under the terms of the MIT License.
 
 ### Changelog
 
+* 0.0.5    Rethink a bit the way the library is working + add some public methods.
 * 0.0.4    Exposes `generate(radius)` to regenerate the circle, opening it to responsiveness.
 * 0.0.3    Allow adding extra text to the graph (issue 3).
            Round integers during animation.

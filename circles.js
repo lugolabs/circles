@@ -28,7 +28,9 @@
 
   API:
     updateRadius(radius) - regenerates the circle with the given radius (see spec/responsive.html for an example hot to create a responsive circle)
-    update(value) - update value of circle. If value is set to true, force the update of displaying
+    updateWidth(width) - regenerates the circle with the given stroke width
+    updateColors(colors) - change colors used to draw the circle
+    update(value, duration) - update value of circle. If value is set to true, force the update of displaying
     getPercent() - returns the percentage value of the circle, based on its current value and its max value
  	getValueFromPercent(percentage) - returns the corresponding value of the circle based on its max value and given percentage
  	htmlifyNumber(number, integerPartClass, decimalPartClass) - returned HTML representation of given number with given classes names applied on tags
@@ -66,7 +68,7 @@
 	this._wrapContainer  = null;
     this._textContainer  = null;
 
-	this._textWrpClass   = 'circles-text-wrp';
+	this._wrpClass       = options.wrpClass || 'circles-wrp';
 	this._textClass      = options.textClass || 'circles-text';
 
     var endAngleRad      = Math.PI / 180 * 270;
@@ -101,7 +103,7 @@
 
     _generateWrapper: function() {
       	this._wrapContainer	=	document.createElement('div');
-		this._wrapContainer.className = this._textWrpClass;
+		this._wrapContainer.className = this._wrpClass;
 		this._wrapContainer.style.position	=	'relative';
 		this._wrapContainer.style.display	=	'inline-block';
 
