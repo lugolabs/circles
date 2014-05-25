@@ -19,8 +19,8 @@
                  if `null` is passed, the animation will not run
 
   API:
-    generate(radius) - regenerates the circle with the given radius (see spec/responsive.html for an example hot to create a responsive circle)
-    updatePercent(percent) - update and animate the percentage dictating the smaller circle
+    updateRadius(radius) - regenerates the circle with the given radius (see spec/responsive.html for an example hot to create a responsive circle)
+    update(value) - update value of circle. If value is set to true, force the update of displaying
 
 */
 
@@ -47,8 +47,8 @@
 
     this._radius         = options.radius;
 
-	this._value          = options.value || 0;
-  	this._max_value      = options.max_value || 100;
+	this._value          = 0;
+  	this._maxValue       = options.maxValue || 100;
 
   	//this._percentage     = options.percentage;
     this._text           = options.text === undefined ? function(value){return value;} : options.text;
@@ -62,35 +62,42 @@
     //this._textClass      = 'circles-text';
     //this._numberClass    = 'circles-number';
 
-    this._confirmAnimation(options.duration);
+    //this._confirmAnimation(options.duration);
 
     var endAngleRad      = Math.PI / 180 * 270;
     this._start          = -Math.PI / 180 * 90;
     this._startPrecise   = this._precise(this._start);
     this._circ           = endAngleRad - this._start;
 
-    this.generate();
+    this.generate().update(options.value || 0);
 
-    if (this._canAnimate) this._animate();
+    //if (this._canAnimate) this._animate();
   };
 
   Circles.prototype = {
     VERSION: '0.0.5',
 
-    generate: function(radius) {
-      if (radius) {
-        this._radius = radius;
-        this._canAnimate = false;
-      }
+    generate: function() {
+
       this._svgSize        = this._radius * 2;
       this._radiusAdjusted = this._radius - (this._strokeWidth / 2);
 
 	  this._generateSvg()._generateText()._generateWrapper();
 
+	  this._el.innerHTML = '';
       this._el.appendChild(this._wrapContainer);
+
+	  return this;
     },
 
-    _confirmAnimation: function(duration) {
+	updateRadius: function(radius)
+	{
+		this._radius = radius;
+
+		return this.generate().update(true);
+	},
+
+    /*_confirmAnimation: function(duration) {
       if (duration === null) {
         this._canAnimate = false;
         return;
@@ -110,24 +117,41 @@
         this._pathFactor   = pathFactor;
         this._numberFactor = numberFactor;
       }
-    },
+    },*/
 
 	getPercent: function()
 	{
-		return (this._value * 100) / this._max_value;
+		return (this._value * 100) / this._maxValue;
+	},
+
+	getValueFromPercent: function(percentage)
+	{
+		return (this._maxValue * percentage) / 100;
 	},
 	
-	updatePercent: function(percent)
+	update: function(value)
 	{
-		if(this._percentage == percent || isNaN(percent))
-			return;
+		if(value === true) //Force update with current value
+		{
+			var percent	=	this.getPercent();
+			this._el.getElementsByTagName('path')[1].setAttribute('d', this._calculatePath(percent, true));
+			this._textContainer.innerHTML	=	this._getText(this._value);
+			return this;
+		}
+
+		//Else update with new value
+		if(this._value == value || isNaN(value))
+			return this;
 
 		var self			=	this,
 			path    		=	self._el.getElementsByTagName('path')[1],
-			oldPercentage	=	self._percentage,
-			isGreater		=	percent > oldPercentage;
+			oldPercentage	=	self.getPercent(),
+			newPercentage, isGreater;
 
-		self._percentage	=	Math.min(100, Math.max(0, percent));
+		this._value	=	Math.min(this._maxValue, Math.max(0, value));
+
+		newPercentage	=	self.getPercent();
+		isGreater		=	newPercentage > oldPercentage;
 
 		function animate() {
 			if(isGreater)
@@ -135,18 +159,21 @@
 			else
 				oldPercentage--;
 
-			if ((isGreater && oldPercentage > self._percentage) || ( ! isGreater && oldPercentage < self._percentage))
+			if ((isGreater && oldPercentage > newPercentage) || ( ! isGreater && oldPercentage < newPercentage))
 				return;
 
 			path.setAttribute('d', self._calculatePath(oldPercentage, true));
+			self._textContainer.innerHTML	=	self._getText(self.getValueFromPercent(oldPercentage));
 
 			requestAnimFrame(self)(animate);
 		}
 
 		requestAnimFrame(self)(animate);
+
+		return this;
 	},
 
-    _animate: function() {
+    /*_animate: function() {
       var i      = 1,
         self     = this,
         path     = this._el.getElementsByTagName('path')[1],
@@ -177,7 +204,7 @@
         };
 
       requestAnimFrame(self)(animate);
-    },
+    },*/
 
     _generateWrapper: function() {
       	this._wrapContainer	=	document.createElement('div');
@@ -208,7 +235,7 @@
 		for(var prop in style)
 			this._textContainer.style[prop]	=	style[prop];
 
-		this._textContainer.innerHTML	=	this._getText(this._canAnimate ? 0 : this._value);
+		this._textContainer.innerHTML	=	this._getText(0);
 
 		return this;
     },
@@ -220,7 +247,7 @@
 
 		value = parseFloat(value.toFixed(2));
 
-		return typeof this._text === 'function' ? this._text(value) : this._text;
+		return typeof this._text === 'function' ? this._text.call(this, value) : this._text;
 	},
 
     _generateSvg: function() {
@@ -231,7 +258,7 @@
 	  this._svg.setAttribute('height', this._svgSize);
 
 	  this._svg.innerHTML = this._generatePath(100, false, this._colors[0]) +
-		                    this._generatePath(this._canAnimate ? 1 : this.getPercent(), true, this._colors[1]);
+		                    this._generatePath(1, true, this._colors[1]);
 
 	  return this;
     },

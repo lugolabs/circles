@@ -30,11 +30,10 @@
 				
 				circle = Circles.create({
 					id:         child.id,
-					percentage: percentage,
+					value:      percentage,
 					radius:     getWidth(),
 					width:      10,
-					number:   	percentage / 10,
-					text:       '%',
+					//text:       '%',
 					colors:     colors[i - 1]
 				});
 
@@ -43,7 +42,7 @@
 
 		window.onresize = function(e) {
 			for (var i = 0; i < circles.length; i++) {
-				circles[i].generate(getWidth());
+				circles[i].updateRadius(getWidth());
 			}
 		};
 
