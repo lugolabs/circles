@@ -156,8 +156,7 @@
 	  this._svg.setAttribute('width', this._svgSize);
 	  this._svg.setAttribute('height', this._svgSize);
 
-	  this._svg.innerHTML = this._generatePath(100, false, this._colors[0]) +
-		                    this._generatePath(1, true, this._colors[1]);
+	  this._generatePath(100, false, this._colors[0])._generatePath(1, true, this._colors[1]);
 
 	  this._movingPath = this._svg.getElementsByTagName('path')[1];
 
@@ -165,7 +164,15 @@
     },
 
     _generatePath: function(percentage, open, color) {
-      return '<path fill="transparent" stroke="' + color + '" stroke-width="' + this._strokeWidth + '" d="' + this._calculatePath(percentage, open) + '"/>';
+      	var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+		path.setAttribute('fill', 'transparent');
+		path.setAttribute('stroke', color);
+		path.setAttribute('stroke-width', this._strokeWidth);
+		path.setAttribute('d',  this._calculatePath(percentage, open));
+
+		this._svg.appendChild(path);
+
+		return this;
     },
 
     _calculatePath: function(percentage, open) {
