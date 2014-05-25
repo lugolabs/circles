@@ -141,6 +141,9 @@
 
 	_getText: function(value)
 	{
+		if( ! this._text)
+			return '';
+
 		if(value === undefined)
 			value = this._value;
 
