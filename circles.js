@@ -25,6 +25,8 @@
                  (optional, it will be `['#EEE', '#F00']` if not specified)
     duration   - value in ms of animation duration; (optional, defaults to 500); 
                  if 0 or `null` is passed, the animation will not run
+	wrpClass     - class name to apply on the generated element wrapping the whole circle.
+	textClass:   - class name to apply on the generated element wrapping the text content.
 
   API:
     updateRadius(radius) - regenerates the circle with the given radius (see spec/responsive.html for an example hot to create a responsive circle)

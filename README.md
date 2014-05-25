@@ -32,16 +32,20 @@ where
 * `value` 		- init value of the circle (optional, defaults to 0)
 * `maxValue` 	- maximum value of the circle (optional, defaults to 100)
 * `width` 		- the width of the ring (optional, has value 10, if not specified)
-* `number`		- the number to display at the centre of the graph (optional, the percentage will show if not specified)
-* `text` 		- the text to display at the centre of the graph (optional, the current "htmlified" value will be shown if not specified)
+* `number`		- the number to display at the center of the graph (optional, the percentage will show if not specified)
+* `text` 		- the text to display at the center of the graph (optional, the current "htmlified" value will be shown if not specified)
                 	if `null` or an empty string, no text will be displayed
                     can also be a function: the returned value will be the displayed text
-						 ex1. function(currentValue) {
-								  return '$'+currentValue;
-							  }
-						 ex2.  function() {
-								   return this.getPercent() + '%';
-							   }
+```js
+//Ex. 1
+function(currentValue) {
+return '$'+currentValue;
+}
+//Ex. 2
+function() {
+return this.getPercent() + '%';
+}
+```
 * `colors` 		- an array of colors, with the first item coloring the full circle (optional, it will be `['#EEE', '#F00']` if not specified)
 * `duration` 	- value in ms of animation's duration; defaults to 500; if 0 or `null` is passed, the animation will not run.
 * `wrpClass` 	- class name to apply on the generated element wrapping the whole circle.
@@ -94,7 +98,7 @@ myCircle.getValueFromPercent(Number percentage)
 Returns the corresponding value of the circle based on its max value and given `percentage`.
 
 ```js
-myCircle.htmlifyNumber(number[, integerPartClass, decimalPartClass])
+myCircle.htmlifyNumber(Number number[, integerPartClass, decimalPartClass])
 ```
 
 Returned HTML representation of given `number` with given classes names applied on tags.
