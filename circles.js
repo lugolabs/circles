@@ -217,6 +217,13 @@
 		return this._generate().update(true);
 	},
 
+    updateWidth: function(width)
+    {
+	  this._strokeWidth = width;
+
+	  return this._generate().update(true);
+    },
+
     updateColors: function(colors)
     {
 		this._colors = colors;

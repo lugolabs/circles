@@ -20,8 +20,10 @@
 		<div class="circle" id="circles-4"></div>
 		<div class="circle" id="circles-5"></div>
 		<br />
-		<button id="add_button">+10</button>
-		<button id="substract_button">-10</button>
+		<button id="add_button">Value +10</button>
+		<button id="substract_button">Value -10</button>
+		<button id="add_width_button">Width +10</button>
+		<button id="substract_width_button">Width -10</button>
 		<button id="colors_button">Swap colors</button>
 	</div>
 
@@ -60,6 +62,18 @@
 		{
 			for(var i = 0, l = circles.length; i < l; i++)
 				circles[i].update(circles[i]._value - 10, 250);
+		};
+
+		document.getElementById('add_width_button').onclick = function()
+		{
+			for(var i = 0, l = circles.length; i < l; i++)
+				circles[i].updateWidth(circles[i]._strokeWidth + 10);
+		};
+
+		document.getElementById('substract_width_button').onclick = function()
+		{
+			for(var i = 0, l = circles.length; i < l; i++)
+				circles[i].updateWidth(circles[i]._strokeWidth - 10);
 		};
 
 		document.getElementById('colors_button').onclick = function()
