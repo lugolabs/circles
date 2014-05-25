@@ -12,7 +12,7 @@
     width      - the width of the ring (optional, has value 10, if not specified)
     value      - init value of the circle (optional, defaults to 0)
     maxValue   - maximum value of the circle (optional, defaults to 100)
-    text       - the text to display at the centre of the graph (optional, the current value will be shown if not specified)
+    text       - the text to display at the centre of the graph (optional, the current "htmlified" value will be shown if not specified)
                  if `null` or an empty string, no text will be displayed
                  can also be a function: the returned value will be the displayed text
                      ex1. function(currentValue) {
@@ -31,6 +31,7 @@
     update(value) - update value of circle. If value is set to true, force the update of displaying
     getPercent() - returns the percentage value of the circle, based on its current value and its max value
  	getValueFromPercent(percentage) - returns the corresponding value of the circle based on its max value and given percentage
+ 	htmlifyNumber(number, integerPartClass, decimalPartClass) - returned HTML representation of given number with given classes names applied on tags
 
 */
 
@@ -57,7 +58,7 @@
 	this._value          = 0;
   	this._maxValue       = options.maxValue || 100;
 
-    this._text           = options.text === undefined ? function(value){return value;} : options.text;
+    this._text           = options.text === undefined ? function(value){return this.htmlifyNumber(value);} : options.text;
     this._strokeWidth    = options.width  || 10;
     this._colors         = options.colors || ['#EEE', '#F00'];
 	this._svg            = null;
@@ -215,6 +216,18 @@
 
 		return this._generate().update(true);
 	},
+
+    updateColors: function(colors)
+    {
+		this._colors = colors;
+
+		var paths = this._svg.getElementsByTagName('path');
+
+		paths[0].setAttribute('stroke', colors[0]);
+		paths[1].setAttribute('stroke', colors[1]);
+
+	    return this;
+    },
 
 	getPercent: function()
 	{
