@@ -8,7 +8,13 @@ Lightwheight JavaScript library that generates circular graphs in SVG. Now with 
 
 Include the `circles.js` file in your HTML file. There are no dependencies.
 
-Create a graph by calling:
+Create a placeholder div in your HTML:
+
+```html
+<div class="circle" id="circles-1"></div>
+```
+
+Create a graph by calling, the id should match id of the placeholder <div>:
 
 ```js
 Circles.create({
