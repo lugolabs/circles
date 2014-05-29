@@ -1,55 +1,222 @@
 describe('Circles', function() {
-	it("is defined", function() {
+	it('is defined', function() {
 		expect(typeof Circles).toEqual('function');
 	});
 
-	describe('#create', function() {
-		var element;
+	var element, circle;
 
-		beforeEach(function() {
-			element = document.createElement('div');
-			element.id = 'circles-1';
-			document.querySelector('body').appendChild(element);
-		});
+	beforeEach(function() {
+		element = document.createElement('div');
+		element.id = 'circles-1';
+		document.body.appendChild(element);
+	});
 
-		afterEach(function() {
-			element.parentNode.removeChild(element);
-		});
+	afterEach(function() {
+		element.parentNode.removeChild(element);
+	});
 
-		it("returns a Circles instance", function() {
+	describe('Creation', function() {
+
+		it('returns a Circles instance', function() {
 			var circles = Circles.create({});
 			expect(circles instanceof Circles).toBeTruthy();
 		});
 
-		it("generates the SVG without animation", function() {
-			Circles.create({
+		it('returns an instance with 0 as value', function() {
+			var circles = Circles.create({id: element.id});
+			expect(circles._value).toEqual(0);
+		});
+
+		it('returns an instance with 100 as max value', function() {
+			var circles = Circles.create({id: element.id});
+			expect(circles._maxValue).toEqual(100);
+		});
+
+		describe('Generated content', function() {
+
+			beforeEach(function() {
+				circle = Circles.create({
+					id: element.id,
+					value: 40,
+					radius: 60,
+					duration: null
+				});
+			});
+
+			it('contains a wrapper with default class', function() {
+
+				Circles.create({
+					id: element.id,
+					value: 40,
+					radius: 60,
+					duration: null,
+					wrpClass: 'wrapContainer'
+				});
+
+				expect(element.firstChild.className).toEqual('wrapContainer');
+			});
+
+			it('contains a wrapper with provided class', function() {
+				expect(element.firstChild.className).toEqual('circles-wrp');
+			});
+
+			it('contains a SVG tag', function() {
+				expect(circle._svg instanceof SVGSVGElement).toBeTruthy();
+			});
+
+			it('contains two PATH tags into the SVG', function() {
+				expect(circle._svg.getElementsByTagName('path').length).toEqual(2);
+			});
+
+			it('contains the SVG without animation', function() {
+				var dValue = circle._movingPath.getAttribute('d');
+				expect(dValue).toEqual('M 59.988797973796764 5.000001140776334 A 55 55 0 0 1 92.39390946942136 104.44811165040565 ');
+			});
+
+			it("contains the SVG with animation", function() {
+				circle	=	Circles.create({
+					id: element.id,
+					value: 40,
+					radius: 60
+				});
+
+				var dValue = circle._movingPath.getAttribute('d');
+				expect(dValue).toEqual('M 59.988797973796764 5.000001140776334 A 55 55 0 0 1 63.39663517303477 5.104983199735706 ');
+			});
+
+		});
+
+		describe('Text', function() {
+
+			it('has a container', function() {
+				circle = Circles.create({
+					id: element.id,
+					value: 40,
+					radius: 60,
+					duration: null
+				});
+
+				expect(circle._textContainer instanceof HTMLDivElement).toBeTruthy();
+			});
+
+			it('has a container with default class', function() {
+				circle = Circles.create({
+					id: element.id,
+					value: 40,
+					radius: 60,
+					duration: null
+				});
+
+				expect(circle._textContainer.className).toEqual('circles-text');
+			});
+
+			it('has a container with provided class', function() {
+				circle = Circles.create({
+					id: element.id,
+					value: 40,
+					radius: 60,
+					duration: null,
+					textClass: 'textContainer'
+				});
+
+				expect(circle._textContainer.className).toEqual('textContainer');
+			});
+
+			it('contains the supplied text', function() {
+				circle = Circles.create({
+					id: element.id,
+					value: 40,
+					radius: 60,
+					text: '%',
+					duration: null
+				});
+
+				expect(circle._textContainer.innerHTML).toEqual('%');
+			});
+
+			it('can be managed by a function', function() {
+				circle = Circles.create({
+					id: element.id,
+					value: 40,
+					radius: 60,
+					text: function(value)
+					{
+						return value + '%';
+					},
+					duration: null
+				});
+
+				expect(circle._textContainer.innerHTML).toEqual('40%');
+			});
+
+			it('can be empty', function() {
+				circle = Circles.create({
+					id: element.id,
+					value: 40,
+					radius: 60,
+					text: null,
+					duration: null
+				});
+
+				expect(circle._textContainer.innerHTML).toBeFalsy();
+			});
+
+		});
+	});
+
+	describe('API', function() {
+
+		beforeEach(function() {
+			circle = Circles.create({
 				id: element.id,
-				percentage: 40,
+				value: 40,
 				radius: 60,
 				duration: null
 			});
-			var expected = '<div class="circles-wrp" style="position:relative; display:inline-block;"><svg width="120" height="120"><path fill="transparent" stroke="#EEE" stroke-width="10" d="M 59.988797973796764 5.000001140776334 A 55 55 0 1 1 59.923606103406065 5.0000530548205475 Z"></path><path fill="transparent" stroke="#F00" stroke-width="10" d="M 59.988797973796764 5.000001140776334 A 55 55 0 0 1 92.39390946942136 104.44811165040565 "></path></svg><div class="circles-text-wrp" style="position:absolute; top:0; left:0; text-align:center; width:100%; font-size:42px; height:120px; line-height:120px;"><span class="circles-number">40</span></div></div>';
-			expect(element.innerHTML).toEqual(expected);
 		});
 
-		it("generates the SVG with animation", function() {
-			Circles.create({
-				id: element.id,
-				percentage: 40,
-				radius: 60
-			});
-			var expected = '<div class="circles-wrp" style="position:relative; display:inline-block;"><svg width="120" height="120"><path fill="transparent" stroke="#EEE" stroke-width="10" d="M 59.988797973796764 5.000001140776334 A 55 55 0 1 1 59.923606103406065 5.0000530548205475 Z"></path><path fill="transparent" stroke="#F00" stroke-width="10" d="M 59.988797973796764 5.000001140776334 A 55 55 0 0 1 63.39663517303477 5.104983199735706 "></path></svg><div class="circles-text-wrp" style="position:absolute; top:0; left:0; text-align:center; width:100%; font-size:42px; height:120px; line-height:120px;"><span class="circles-number">0</span></div></div>';
-			expect(element.innerHTML).toEqual(expected);
+		it('can update radius', function() {
+			circle.updateRadius(30);
+
+			expect(circle._svg.getAttribute('width') == 60).toBeTruthy();
 		});
 
-		it("adds the supplied text", function() {
-			Circles.create({
+		it('can update stroke width', function() {
+			circle.updateWidth(20);
+
+			expect(circle._movingPath.getAttribute('stroke-width') == 20).toBeTruthy();
+		});
+
+		it('can update colors', function() {
+			circle.updateColors(['#000', '#fff']);
+
+			var paths = circle._svg.getElementsByTagName('path');
+
+			expect(paths[0].getAttribute('stroke') === '#000' && paths[1].getAttribute('stroke') === '#fff').toBeTruthy();
+		});
+
+		it('can get correct percentage', function() {
+			expect(circle.getPercent()).toEqual(40);
+		});
+
+		it('can update value', function() {
+			circle.update(50);
+			expect(circle.getPercent()).toEqual(50);
+		});
+
+		it('can get correct value from percentage', function() {
+
+			circle = Circles.create({
 				id: element.id,
-				percentage: 40,
-				radius: 60,
-				text: '%'
+				maxValue: 1000,
+				duration: null
 			});
-			expect(element.innerHTML.indexOf('<span class="circles-text">%</span>') > 0).toBeTruthy();
+
+			expect(circle.getValueFromPercent(25)).toEqual(250);
+		});
+
+		it('can return HTML representation of a number', function() {
+			expect(circle.htmlifyNumber(12.43, 'int', 'float')).toEqual('<span class="int">12</span>.<span class="float">43</span>');
 		});
 	});
 
