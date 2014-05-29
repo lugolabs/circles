@@ -134,6 +134,14 @@ Browsers that support SVG.
 * Chrome for Android 18+
 * Firefox for Android 15+
 
+### Contributors
+
+* Artan Sinani
+* [Adrien Guéret](https://github.com/adrien-gueret)
+* [radoslawhryciow](https://github.com/radoslawhryciow)
+* [Roman Salnikov](https://github.com/RSalo)
+* [webal](https://github.com/webal)
+
 
 ### Inspirations
 

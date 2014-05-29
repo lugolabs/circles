@@ -29,7 +29,6 @@ describe('Circles', function() {
 
 		it('returns an instance with 100 as max value', function() {
 			var circles = Circles.create({id: element.id});
-			console.log(circles);
 			expect(circles._maxValue).toEqual(100);
 		});
 
