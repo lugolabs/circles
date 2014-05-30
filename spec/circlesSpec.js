@@ -5,6 +5,16 @@ describe('Circles', function() {
 
 	var element, circle;
 
+	function getText()
+	{
+		return element.firstChild.children[1];
+	}
+
+	function getSVG()
+	{
+		return element.firstChild.getElementsByTagName('svg')[0];
+	}
+
 	beforeEach(function() {
 		element = document.createElement('div');
 		element.id = 'circles-1';
@@ -24,12 +34,12 @@ describe('Circles', function() {
 
 		it('returns an instance with 0 as value', function() {
 			var circles = Circles.create({id: element.id});
-			expect(circles._value).toEqual(0);
+			expect(circles.getValue()).toEqual(0);
 		});
 
 		it('returns an instance with 100 as max value', function() {
 			var circles = Circles.create({id: element.id});
-			expect(circles._maxValue).toEqual(100);
+			expect(circles.getMaxValue()).toEqual(100);
 		});
 
 		describe('Generated content', function() {
@@ -61,15 +71,15 @@ describe('Circles', function() {
 			});
 
 			it('contains a SVG tag', function() {
-				expect(circle._svg instanceof SVGSVGElement).toBeTruthy();
+				expect(getSVG() instanceof SVGSVGElement).toBeTruthy();
 			});
 
 			it('contains two PATH tags into the SVG', function() {
-				expect(circle._svg.getElementsByTagName('path').length).toEqual(2);
+				expect(getSVG().getElementsByTagName('path').length).toEqual(2);
 			});
 
 			it('contains the SVG without animation', function() {
-				var dValue = circle._movingPath.getAttribute('d');
+				var dValue = getSVG().getElementsByTagName('path')[1].getAttribute('d');
 				expect(dValue).toEqual('M 59.988797973796764 5.000001140776334 A 55 55 0 0 1 92.39390946942136 104.44811165040565 ');
 			});
 
@@ -80,7 +90,7 @@ describe('Circles', function() {
 					radius: 60
 				});
 
-				var dValue = circle._movingPath.getAttribute('d');
+				var dValue = element.firstChild.getElementsByTagName('svg')[0].getElementsByTagName('path')[1].getAttribute('d');
 				expect(dValue).toEqual('M 59.988797973796764 5.000001140776334 A 55 55 0 0 1 63.39663517303477 5.104983199735706 ');
 			});
 
@@ -95,8 +105,7 @@ describe('Circles', function() {
 					radius: 60,
 					duration: null
 				});
-
-				expect(circle._textContainer instanceof HTMLDivElement).toBeTruthy();
+				expect(getText() instanceof HTMLDivElement).toBeTruthy();
 			});
 
 			it('has a container with default class', function() {
@@ -107,7 +116,7 @@ describe('Circles', function() {
 					duration: null
 				});
 
-				expect(circle._textContainer.className).toEqual('circles-text');
+				expect(getText().className).toEqual('circles-text');
 			});
 
 			it('has a container with provided class', function() {
@@ -119,7 +128,7 @@ describe('Circles', function() {
 					textClass: 'textContainer'
 				});
 
-				expect(circle._textContainer.className).toEqual('textContainer');
+				expect(getText().className).toEqual('textContainer');
 			});
 
 			it('contains the supplied text', function() {
@@ -131,7 +140,7 @@ describe('Circles', function() {
 					duration: null
 				});
 
-				expect(circle._textContainer.innerHTML).toEqual('%');
+				expect(getText().innerHTML).toEqual('%');
 			});
 
 			it('can be managed by a function', function() {
@@ -146,7 +155,7 @@ describe('Circles', function() {
 					duration: null
 				});
 
-				expect(circle._textContainer.innerHTML).toEqual('40%');
+				expect(getText().innerHTML).toEqual('40%');
 			});
 
 			it('can be empty', function() {
@@ -158,7 +167,7 @@ describe('Circles', function() {
 					duration: null
 				});
 
-				expect(circle._textContainer.innerHTML).toBeFalsy();
+				expect(getText().innerHTML).toBeFalsy();
 			});
 
 		});
@@ -178,19 +187,19 @@ describe('Circles', function() {
 		it('can update radius', function() {
 			circle.updateRadius(30);
 
-			expect(circle._svg.getAttribute('width') == 60).toBeTruthy();
+			expect(getSVG().getAttribute('width') == 60).toBeTruthy();
 		});
 
 		it('can update stroke width', function() {
 			circle.updateWidth(20);
 
-			expect(circle._movingPath.getAttribute('stroke-width') == 20).toBeTruthy();
+			expect(getSVG().getElementsByTagName('path')[1].getAttribute('stroke-width') == 20).toBeTruthy();
 		});
 
 		it('can update colors', function() {
 			circle.updateColors(['#000', '#fff']);
 
-			var paths = circle._svg.getElementsByTagName('path');
+			var paths = getSVG().getElementsByTagName('path');
 
 			expect(paths[0].getAttribute('stroke') === '#000' && paths[1].getAttribute('stroke') === '#fff').toBeTruthy();
 		});

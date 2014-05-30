@@ -34,8 +34,10 @@
       updateColors(colors) - change colors used to draw the circle
       update(value, duration) - update value of circle. If value is set to true, force the update of displaying
       getPercent() - returns the percentage value of the circle, based on its current value and its max value
-   	getValueFromPercent(percentage) - returns the corresponding value of the circle based on its max value and given percentage
-   	htmlifyNumber(number, integerPartClass, decimalPartClass) - returned HTML representation of given number with given classes names applied on tags
+      getValue() - returns the value of the circle
+      getMaxValue() - returns the max value of the circle
+   	  getValueFromPercent(percentage) - returns the corresponding value of the circle based on its max value and given percentage
+   	  htmlifyNumber(number, integerPartClass, decimalPartClass) - returned HTML representation of given number with given classes names applied on tags
 
 */
 
@@ -250,6 +252,16 @@
   	getValueFromPercent: function(percentage) {
 	    return (this._maxValue * percentage) / 100;
   	},
+
+    getValue: function()
+    {
+		return this._value;
+    },
+
+	getMaxValue: function()
+	{
+	    return this._maxValue;
+	},
 
   	update: function(value, duration) {
   	  if (value === true) {//Force update with current value
