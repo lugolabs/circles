@@ -56,7 +56,7 @@
 
     if (this._el === null) return;
 
-    this._radius         = options.radius;
+    this._radius         = options.radius || 10;
     this._duration       = options.duration === undefined ? 500 : options.duration;
 
     this._value           = 0;
