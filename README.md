@@ -105,6 +105,18 @@ myCircle.getPercent()
 Returns the percentage value of the circle, based on its current value and its max value.
 
 ```js
+myCircle.getValue()
+```
+
+Returns the value of the circle.
+
+```js
+myCircle.getMaxValue()
+```
+
+Returns the max value of the circle.
+
+```js
 myCircle.getValueFromPercent(Number percentage)
 ```
 
