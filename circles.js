@@ -76,8 +76,8 @@
     this._wrpClass       = options.wrpClass || 'circles-wrp';
     this._textClass      = options.textClass || 'circles-text';
 
-    this._styleWrapper   = options.styleWrapper || true;
-    this._styleText      = options.styleText || true;
+    this._styleWrapper   = options.styleWrapper === false ? false : true;
+    this._styleText      = options.styleText === false ? false : true;
 
     var endAngleRad      = Math.PI / 180 * 270;
     this._start          = -Math.PI / 180 * 90;

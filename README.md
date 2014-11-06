@@ -2,7 +2,7 @@
 
 ![Circles](http://lugolabs.com/static/circles.png)
 
-Lightwheight JavaScript library that generates circular graphs in SVG. Now with animation.
+Lightweight JavaScript library that generates circular graphs in SVG. Now with animation.
 
 ### Get Started
 
@@ -144,6 +144,12 @@ To help with this, a few CSS classes have been exposed:
 * `circles-text` 	- the element wrapping text content
 
 You can overwritte these classes by sending properties `wrpClass` and/or `textClass` to the constructor.
+
+
+### Tests
+
+Tests can be run with `grunt jasmine`.
+
 
 ### Compatibility
 

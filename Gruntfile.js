@@ -28,14 +28,25 @@ grunt.initConfig({
       }
     },
 
+    jasmine: {
+      pivotal: {
+        src: 'circles.js',
+        options: {
+          specs: 'spec/*Spec.js',
+        }
+      }
+    }
+
 
 });
 
 // Dependencies
 grunt.loadNpmTasks('grunt-contrib-uglify');
+grunt.loadNpmTasks('grunt-contrib-jasmine');
 
 // Default task.
 grunt.registerTask('default', 'uglify');
+
 
 
 };
