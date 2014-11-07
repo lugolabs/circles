@@ -94,6 +94,31 @@ describe('Circles', function() {
         expect(dValue).toEqual('M 59.988797973796764 5.000001140776334 A 55 55 0 0 1 63.39663517303477 5.104983199735706 ');
       });
 
+      it('has styles by default', function() {
+        circle = Circles.create({
+          id: element.id,
+          value: 40,
+          radius: 60,
+          text: '%',
+          duration: null
+        });
+
+        expect(element.firstChild.style[0]).toBeTruthy();
+      });
+
+      it('can have its styles overridden', function() {
+        circle = Circles.create({
+          id: element.id,
+          value: 40,
+          radius: 60,
+          duration: null,
+          text: '%',
+          styleWrapper: false
+        });
+
+        expect(element.firstChild.style[0]).toBeFalsy();
+      });
+
     });
 
     describe('Text', function() {
@@ -188,11 +213,12 @@ describe('Circles', function() {
           value: 40,
           radius: 60,
           duration: null,
+          text: '%',
           styleText: false
         });
 
         expect(getText().style[0]).toBeFalsy();
-      })
+      });
 
     });
   });
