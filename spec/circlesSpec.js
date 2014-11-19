@@ -80,7 +80,7 @@ describe('Circles', function() {
 
 			it('contains the SVG without animation', function() {
 				var dValue = getSVG().getElementsByTagName('path')[1].getAttribute('d');
-				expect(dValue).toEqual('M 59.988797973796764 5.000001140776334 A 55 55 0 0 1 92.39390946942136 104.44811165040565 ');
+				expect(dValue).toEqual('M 59.988797973796764 5.000001140776291 A 55 55 0 0 1 92.3939094694214 104.44811165040569 ');
 			});
 
 			it("contains the SVG with animation", function() {
@@ -91,7 +91,7 @@ describe('Circles', function() {
 				});
 
 				var dValue = element.firstChild.getElementsByTagName('svg')[0].getElementsByTagName('path')[1].getAttribute('d');
-				expect(dValue).toEqual('M 59.988797973796764 5.000001140776334 A 55 55 0 0 1 63.39663517303477 5.104983199735706 ');
+				expect(dValue).toEqual('M 59.988797973796764 5.000001140776291 A 55 55 0 0 1 63.396635173034774 5.1049831997356705 ');
 			});
 
 		});
