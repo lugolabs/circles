@@ -154,7 +154,7 @@ Tests can be run with [karma](http://karma-runner.github.io/0.12/index.html):
 karma start
 ```
 
-or grunt:
+or [grunt](http://gruntjs.com):
 
 ```shell
 grunt jasmine
