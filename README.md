@@ -2,7 +2,7 @@
 
 ![Circles](http://lugolabs.com/static/circles.png)
 
-Lightwheight JavaScript library that generates circular graphs in SVG. Now with animation.
+Lightweight JavaScript library that generates circular graphs in SVG. Now with animation.
 
 ### Get Started
 
@@ -25,17 +25,19 @@ Create a graph by calling, the id should match id of the placeholder <div>:
 
 ```js
 var myCircle = Circles.create({
-	id:         'circles-1',
-	radius:     60,
-	value:      43,
-	maxValue:   100,
-	width:      10,
-	text:       function(value){return value + '%';},
-	colors:     ['#D3B6C6', '#4B253A'],
-	duration: 	400,
-	wrpClass:	'circles-wrp',
-	textClass:	'circles-text'
-})
+  id:           'circles-1',
+  radius:       60,
+  value:        43,
+  maxValue:     100,
+  width:        10,
+  text:         function(value){return value + '%';},
+  colors:       ['#D3B6C6', '#4B253A'],
+  duration: 	  400,
+  wrpClass:	    'circles-wrp',
+  textClass:	  'circles-text'
+  styleWrapper: true,
+  styleText:    true
+});
 ```
 
 where
@@ -47,7 +49,7 @@ where
 * `width` 		- the width of the ring (optional, has value 10, if not specified)
 * `number`		- the number to display at the center of the graph (optional, the percentage will show if not specified)
 * `text` 		- the text to display at the center of the graph (optional, the current "htmlified" value will be shown if not specified)
-                	if `null` or an empty string, no text will be displayed
+                  if `null` or an empty string, no text will be displayed
                     can also be a function: the returned value will be the displayed text
 ```js
 //Ex. 1
@@ -63,6 +65,8 @@ return this.getPercent() + '%';
 * `duration` 	- value in ms of animation's duration; defaults to 500; if 0 or `null` is passed, the animation will not run.
 * `wrpClass` 	- class name to apply on the generated element wrapping the whole circle.
 * `textClass` 	- class name to apply on the generated element wrapping the text content.
+* `styleWrapper` - whether or not to add inline styles to the wrapper element (defaults to true)
+* `styleText`	   - whether or not to add inline styles to the text (defaults to true)
 
 ### API
 
@@ -140,6 +144,12 @@ To help with this, a few CSS classes have been exposed:
 * `circles-text` 	- the element wrapping text content
 
 You can overwritte these classes by sending properties `wrpClass` and/or `textClass` to the constructor.
+
+
+### Tests
+
+Tests can be run with `grunt jasmine`.
+
 
 ### Compatibility
 
