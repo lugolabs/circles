@@ -1,7 +1,7 @@
 {
   "name": "circles",
-  "version": "0.0.4",
-  "description": "Lightwheight JavaScript library that generates circular graphs in SVG. Now with animation.",
+  "version": "0.0.5",
+  "description": "Lightweight JavaScript library that generates circular graphs in SVG. Now with animation.",
   "repository": {
     "type": "git",
     "url": "git://github.com/lugolabs/circles.git"
