@@ -25,44 +25,48 @@ Create a graph by calling, the id should match id of the placeholder <div>:
 
 ```js
 var myCircle = Circles.create({
-	id:         'circles-1',
-	radius:     60,
-	value:      43,
-	maxValue:   100,
-	width:      10,
-	text:       function(value){return value + '%';},
-	colors:     ['#D3B6C6', '#4B253A'],
-	duration: 	400,
-	wrpClass:	'circles-wrp',
-	textClass:	'circles-text'
-})
+  id:           'circles-1',
+  radius:       60,
+  value:        43,
+  maxValue:     100,
+  width:        10,
+  text:         function(value){return value + '%';},
+  colors:       ['#D3B6C6', '#4B253A'],
+  duration: 	  400,
+  wrpClass:	    'circles-wrp',
+  textClass:	  'circles-text'
+  styleWrapper: true,
+  styleText:    true
+});
 ```
 
 where
 
-* `id` 			- the DOM element that will hold the graph
+* `id` 			  - the DOM element that will hold the graph
 * `radius` 		- the radius of the circles
 * `value` 		- init value of the circle (optional, defaults to 0)
 * `maxValue` 	- maximum value of the circle (optional, defaults to 100)
 * `width` 		- the width of the ring (optional, has value 10, if not specified)
 * `number`		- the number to display at the center of the graph (optional, the percentage will show if not specified)
-* `text` 		- the text to display at the center of the graph (optional, the current "htmlified" value will be shown if not specified)
-                	if `null` or an empty string, no text will be displayed
+* `text` 		  - the text to display at the center of the graph (optional, the current "htmlified" value will be shown if not specified)
+                  if `null` or an empty string, no text will be displayed
                     can also be a function: the returned value will be the displayed text
 ```js
 //Ex. 1
 function(currentValue) {
-return '$'+currentValue;
+  return '$'+currentValue;
 }
 //Ex. 2
 function() {
-return this.getPercent() + '%';
+  return this.getPercent() + '%';
 }
 ```
 * `colors` 		- an array of colors, with the first item coloring the full circle (optional, it will be `['#EEE', '#F00']` if not specified)
 * `duration` 	- value in ms of animation's duration; defaults to 500; if 0 or `null` is passed, the animation will not run.
 * `wrpClass` 	- class name to apply on the generated element wrapping the whole circle.
 * `textClass` 	- class name to apply on the generated element wrapping the text content.
+* `styleWrapper` - whether or not to add inline styles to the wrapper element (defaults to true)
+* `styleText`	   - whether or not to add inline styles to the text (defaults to true)
 
 ### API
 
@@ -141,6 +145,22 @@ To help with this, a few CSS classes have been exposed:
 
 You can overwritte these classes by sending properties `wrpClass` and/or `textClass` to the constructor.
 
+
+### Tests
+
+Tests can be run with [karma](http://karma-runner.github.io/0.12/index.html):
+
+```shell
+karma start
+```
+
+or [grunt](http://gruntjs.com):
+
+```shell
+grunt jasmine
+```
+
+
 ### Compatibility
 
 Browsers that support SVG.
@@ -166,6 +186,7 @@ Browsers that support SVG.
 * [radoslawhryciow](https://github.com/radoslawhryciow)
 * [Roman Salnikov](https://github.com/RSalo)
 * [webal](https://github.com/webal)
+* [Kieran](https://github.com/kieranajp)
 
 
 ### Inspirations
@@ -182,6 +203,7 @@ Circles is licensed under the terms of the MIT License.
 
 ### Changelog
 
+* 0.0.6    Make inline styles optional.
 * 0.0.5    Rethink a bit the way the library is working + add some public methods.
 * 0.0.4    Exposes `generate(radius)` to regenerate the circle, opening it to responsiveness.
 * 0.0.3    Allow adding extra text to the graph (issue 3).
