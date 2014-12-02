@@ -35,32 +35,30 @@ var myCircle = Circles.create({
 
 where
 
-* `id` 			  - the DOM element that will hold the graph
-* `radius` 		- the radius of the circles
-* `value` 		- init value of the circle (optional, defaults to 0)
-* `maxValue` 	- maximum value of the circle (optional, defaults to 100)
-* `width` 		- the width of the ring (optional, has value 10, if not specified)
-* `number`		- the number to display at the center of the graph (optional, the percentage will show if not specified)
-* `text` 		  - the text to display at the center of the graph (optional, the current "htmlified" value will be shown if not specified)
-                  if `null` or an empty string, no text will be displayed
-                    can also be a function: the returned value will be the displayed text
+* `id` 			      - the DOM element that will hold the graph
+* `radius` 		    - the radius of the circles
+* `value` 		    - init value of the circle (optional, defaults to 0)
+* `maxValue` 	    - maximum value of the circle (optional, defaults to 100)
+* `width` 		    - the width of the ring (optional, has value 10, if not specified)
+* `colors` 		    - an array of colors, with the first item coloring the full circle (optional, it will be `['#EEE', '#F00']` if not specified)
+* `duration` 	    - value in ms of animation's duration; defaults to 500; if 0 or `null` is passed, the animation will not run.
+* `wrpClass` 	    - class name to apply on the generated element wrapping the whole circle.
+* `textClass` 	   - class name to apply on the generated element wrapping the text content.
+* `styleWrapper`  - whether or not to add inline styles to the wrapper element (defaults to true)
+* `styleText`	    - whether or not to add inline styles to the text (defaults to true)
+* `text`          - the text to display at the center of the graph (optional, the current "htmlified" value will be shown). If `null` or an empty string, no text will be displayed. It can also be a function: the returned value will be the displayed text like in the examples below:
+
 ```js
-//Ex. 1
+// Example 1
 function(currentValue) {
   return '$'+currentValue;
 }
-//Ex. 2
+// Example 2
 function() {
   return this.getPercent() + '%';
 }
 ```
-* `colors` 		- an array of colors, with the first item coloring the full circle (optional, it will be `['#EEE', '#F00']` if not specified)
-* `duration` 	- value in ms of animation's duration; defaults to 500; if 0 or `null` is passed, the animation will not run.
-* `wrpClass` 	- class name to apply on the generated element wrapping the whole circle.
-* `textClass` 	- class name to apply on the generated element wrapping the text content.
-* `styleWrapper` - whether or not to add inline styles to the wrapper element (defaults to true)
-* `styleText`	   - whether or not to add inline styles to the text (defaults to true)
- 
+
 
 ### Install with grunt
 
@@ -141,8 +139,10 @@ The styles have been specified inline to avoid external dependencies. But they c
 
 To help with this, a few CSS classes have been exposed:
 
-* `circles-wrp` 	- the element wrapping the whole circle
-* `circles-text` 	- the element wrapping text content
+* `circles-wrp` 	    - the element wrapping the whole circle
+* `circles-text`      - the element wrapping text content
+* `circles-integer`   - the element wrapping the text before the dot
+* `circles-decimals` 	- the element wrapping the decimal places
 
 You can overwritte these classes by sending properties `wrpClass` and/or `textClass` to the constructor.
 
