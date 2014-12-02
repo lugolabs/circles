@@ -14,7 +14,7 @@ Create a placeholder div in your HTML:
 <div class="circle" id="circles-1"></div>
 ```
 
-Create a graph by calling, the id should match id of the placeholder <div>:
+Create a graph by calling, the id should match id of the placeholder `<div>`:
 
 ```js
 var myCircle = Circles.create({
