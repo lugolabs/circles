@@ -4,13 +4,6 @@
 
 Lightweight JavaScript library that generates circular graphs in SVG. Now with animation.
 
-### Get Started
-
-1. Get the library
-2. Install all the dependencies, run `npm install`
-3. Once you have the dependencies installed, run `grunt` from the project directory. This will run the default grunt task which will minify `circles.js` to `circles.min.js`
-
-
 ### Usage
 
 Include the `circles.js` or `circles.min.js` file in your HTML file. There are no dependencies.
@@ -67,6 +60,14 @@ function() {
 * `textClass` 	- class name to apply on the generated element wrapping the text content.
 * `styleWrapper` - whether or not to add inline styles to the wrapper element (defaults to true)
 * `styleText`	   - whether or not to add inline styles to the text (defaults to true)
+ 
+
+### Install with grunt
+
+1. Get the library
+2. Install all the dependencies, run `npm install`
+3. Once you have the dependencies installed, run `grunt` from the project directory. This will run the default grunt task which will minify `circles.js` to `circles.min.js`
+
 
 ### API
 
