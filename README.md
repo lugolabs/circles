@@ -161,6 +161,12 @@ or [grunt](http://gruntjs.com):
 grunt jasmine
 ```
 
+### Examples
+
+* [index.html](https://github.com/lugolabs/circles/blob/master/spec/index.html) - Overall functionality
+* [responsive.html](https://github.com/lugolabs/circles/blob/master/spec/responsive.html) - Making circles responsive
+* [viewport.html](https://github.com/lugolabs/circles/blob/master/spec/viewport.html) - Animate the circles when in viewport
+
 
 ### Compatibility
 

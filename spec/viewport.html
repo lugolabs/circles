@@ -1,0 +1,102 @@
+<html>
+<head>
+	<title>Circles</title>
+	<style>
+		body {
+			margin: 2em auto;
+			max-width: 30em;
+			font-size: 1.5em;
+			line-height: 2;
+		}
+
+		h1 {
+			line-height: 1.1;
+		}
+
+		#canvas .circle {
+			display: inline-block;
+			margin: 1em;
+		}
+
+		.circles-decimals {
+			font-size: .4em;
+		}
+	</style>
+</head>
+<body>
+	<h1>Example of animating the Circles only when visible</h1>
+	<h2>Scroll down to view them</h2>
+	<p>
+		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas dignissim eleifend justo a vestibulum. Quisque rutrum nec magna sit amet tristique. Donec magna magna, faucibus in enim id, malesuada volutpat justo. Etiam tellus tortor, aliquet vitae vestibulum quis, commodo auctor justo. Suspendisse pharetra egestas tempor. Ut tempus metus vel tincidunt mattis. Aliquam quis odio volutpat, interdum ante in, pulvinar purus. Aliquam auctor libero vitae ante vehicula efficitur. Integer eros nisi, dapibus eget varius in, aliquet finibus nisi. Phasellus tempus mauris ligula, ut luctus dolor volutpat id. Praesent lobortis nisl quam, a vehicula nibh malesuada quis. Curabitur malesuada sed metus ut pretium. Morbi commodo mauris nec fermentum tristique. Morbi pharetra rhoncus diam, ut gravida est laoreet maximus.
+	</p>
+	<p>
+		Maecenas tellus metus, ultricies non ultrices vel, suscipit ac enim. Maecenas luctus molestie massa, id consequat lacus tempus vitae. In hac habitasse platea dictumst. Mauris hendrerit, tellus in cursus bibendum, nulla felis blandit erat, id sodales neque odio non tortor. Pellentesque a auctor leo. Mauris in velit nec est varius dignissim. Suspendisse eget ligula non lectus convallis imperdiet ut nec magna. Nam cursus odio non tortor tempor, at fermentum arcu tempus. Proin vitae laoreet nibh. In ullamcorper sem quis luctus sagittis. In consequat iaculis augue, ut consequat odio eleifend a. Duis imperdiet varius urna id faucibus. Curabitur suscipit purus vel sem sollicitudin, id dignissim dui consequat.
+	</p>
+	<p>
+		Suspendisse nec velit viverra, pretium leo a, malesuada enim. Phasellus scelerisque ultricies tortor, eu faucibus leo laoreet eget. Morbi urna mi, tincidunt nec libero vitae, tempor hendrerit nisi. Nunc sed risus ipsum. Integer porttitor, nunc vitae vestibulum blandit, neque dolor consectetur mi, gravida euismod sem arcu eu elit. Praesent pretium odio id ipsum convallis, ut convallis est lobortis. In porttitor vulputate est ultricies volutpat. Mauris ornare eget nulla in gravida. Nunc laoreet fermentum risus, et fermentum leo suscipit vitae. Praesent tincidunt ligula eget quam pulvinar maximus. Maecenas at mollis nisi, non sagittis erat.
+	</p>
+	<p>
+		Mauris quis vestibulum quam. Duis consequat sollicitudin tempor. Pellentesque cursus lacus ipsum, ut dictum nisl eleifend id. Nam quis nisl sodales, sodales nulla eu, placerat quam. Sed posuere mattis quam non condimentum. Pellentesque ut egestas nisl. Sed orci ante, laoreet quis sollicitudin sit amet, hendrerit at nisl. Curabitur vel dolor non nulla condimentum varius non nec orci. Sed tempor nisi erat, quis egestas enim tempor a.
+	</p>
+	<div id="canvas">
+		<div class="circle" id="circles-1"></div>
+		<div class="circle" id="circles-2"></div>
+		<div class="circle" id="circles-3"></div>
+	</div>
+	<p>
+		Sed aliquam felis nisl, elementum vehicula ipsum congue quis. Aenean sem sapien, rutrum et tincidunt sed, porta lacinia arcu. Nunc ut justo vel mi pharetra laoreet. Ut ornare ultrices pharetra. Ut rutrum orci pretium quam efficitur hendrerit. In aliquet laoreet est, non suscipit erat consequat eget. Quisque mollis rutrum tortor eget rutrum. Vivamus eu consequat diam, id lobortis justo. Phasellus tincidunt vel libero id pellentesque. Etiam leo justo, rhoncus ac mollis id, suscipit ac libero.
+	</p>
+
+
+	<script src="../circles.js"></script>
+	<script>
+		(function() {
+			var canvas = document.getElementById('canvas'),
+				circlesCreated = false;
+
+			function onScroll() {
+				if (!circlesCreated && elementInViewport(canvas)) {
+					circlesCreated = true;
+					createCircles();
+				}
+			}
+
+			function elementInViewport(el) {
+		    var rect = el.getBoundingClientRect();
+
+		    return (
+		      rect.top  >= 0 &&
+		      rect.left >= 0 &&
+		      rect.top  <= (window.innerHeight || document.documentElement.clientHeight)
+		    );
+		  }
+
+			function createCircles() {
+				var colors = [
+						['#D3B6C6', '#4B253A'], ['#FCE6A4', '#EFB917'], ['#BEE3F7', '#45AEEA']
+					],
+					circles = [];
+
+				for (var i = 1; i <= colors.length; i++) {
+					var child = document.getElementById('circles-' + i),
+						percentage = 31.42 + (i * 9.84),
+
+						circle = Circles.create({
+							id:         child.id,
+							value:      percentage,
+							radius:     70,
+							width:      10,
+							colors:     colors[i - 1]
+						});
+
+					circles.push(circle);
+				}
+			}
+
+		  window.onscroll = onScroll;
+
+		})();
+
+	</script>
+</body>
+</html>
