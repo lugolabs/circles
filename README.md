@@ -27,7 +27,7 @@ var myCircle = Circles.create({
   colors:       ['#D3B6C6', '#4B253A'],
   duration: 	  400,
   wrpClass:	    'circles-wrp',
-  textClass:	  'circles-text'
+  textClass:	  'circles-text',
   styleWrapper: true,
   styleText:    true
 });
