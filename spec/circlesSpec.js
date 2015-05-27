@@ -78,6 +78,24 @@ describe('Circles', function() {
         expect(getSVG().getElementsByTagName('path').length).toEqual(2);
       });
 
+      it('adds class attributes to the path', function() {
+        expect(getSVG().getElementsByTagName('path')[0].getAttribute('class')).toEqual('circles-maxValueStroke');
+      });
+
+      it('adds provided class attributes to the path', function() {
+
+        Circles.create({
+          id: element.id,
+          value: 40,
+          radius: 60,
+          duration: null,
+          maxValueStrokeClass: 'testMaxValueClass',
+          wrpClass: 'wrapContainer'
+        });
+
+        expect(getSVG().getElementsByTagName('path')[0].getAttribute('class')).toEqual('testMaxValueClass');
+      });
+
       it('contains the SVG without animation', function() {
         var dValue = getSVG().getElementsByTagName('path')[1].getAttribute('d');
         expect(dValue).toEqual('M 59.988797973796764 5.000001140776291 A 55 55 0 0 1 92.3939094694214 104.44811165040569 ');

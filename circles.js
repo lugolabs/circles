@@ -76,6 +76,9 @@
     this._wrpClass       = options.wrpClass || 'circles-wrp';
     this._textClass      = options.textClass || 'circles-text';
 
+    this._valClass       = options.valueStrokeClass || 'circles-valueStroke';
+    this._maxValClass    = options.maxValueStrokeClass || 'circles-maxValueStroke';
+
     this._styleWrapper   = options.styleWrapper === false ? false : true;
     this._styleText      = options.styleText === false ? false : true;
 
@@ -166,19 +169,20 @@
       this._svg.setAttribute('width', this._svgSize);
       this._svg.setAttribute('height', this._svgSize);
 
-      this._generatePath(100, false, this._colors[0])._generatePath(1, true, this._colors[1]);
+      this._generatePath(100, false, this._colors[0], this._maxValClass)._generatePath(1, true, this._colors[1], this._valClass);
 
       this._movingPath = this._svg.getElementsByTagName('path')[1];
 
       return this;
     },
 
-    _generatePath: function(percentage, open, color) {
+    _generatePath: function(percentage, open, color, pathClass) {
       var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       path.setAttribute('fill', 'transparent');
       path.setAttribute('stroke', color);
       path.setAttribute('stroke-width', this._strokeWidth);
       path.setAttribute('d',  this._calculatePath(percentage, open));
+      path.setAttribute('class', pathClass);
 
       this._svg.appendChild(path);
 
@@ -232,7 +236,7 @@
     },
 
     updateRadius: function(radius) {
-        this._radius = radius;
+      this._radius = radius;
 
       return this._generate().update(true);
     },
@@ -264,13 +268,13 @@
 
     getValue: function()
     {
-    return this._value;
+      return this._value;
     },
 
-  getMaxValue: function()
-  {
+    getMaxValue: function()
+    {
       return this._maxValue;
-  },
+    },
 
     update: function(value, duration) {
       if (value === true) {//Force update with current value
@@ -282,9 +286,9 @@
       if (duration === undefined) duration = this._duration;
 
       var self          = this,
-        oldPercentage = self.getPercent(),
-        delta         = 1,
-        newPercentage, isGreater, steps, stepDuration;
+          oldPercentage = self.getPercent(),
+          delta         = 1,
+          newPercentage, isGreater, steps, stepDuration;
 
       this._value = Math.min(this._maxValue, Math.max(0, value));
 
