@@ -42,7 +42,7 @@ where
 * `value` 		    - init value of the circle (optional, defaults to 0)
 * `maxValue` 	    - maximum value of the circle (optional, defaults to 100)
 * `width` 		    - the width of the ring (optional, has value 10, if not specified)
-* `colors` 		    - an array of colors, with the first item coloring the full circle (optional, it will be `['#EEE', '#F00']` if not specified)
+* `colors` 		    - an array of colors, with the first item coloring the full circle (optional, it will be `['#EEE', '#F00']` if not specified) Can also be an rgba() value (example: ['rgba(255,255,255,0.25)', 'rgba(125,125,125,0.5)'])
 * `duration` 	    - value in ms of animation's duration; defaults to 500; if 0 or `null` is passed, the animation will not run.
 * `wrpClass` 	    - class name to apply on the generated element wrapping the whole circle.
 * `textClass`      - class name to apply on the generated element wrapping the text content.
