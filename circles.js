@@ -49,7 +49,7 @@
     define([], factory);
   }
   else {
-    root.GMaps = factory();
+    root.Circles = factory();
   }
 
 
@@ -66,7 +66,7 @@
                        setTimeout(callback, 1000 / 60);
                      },
 
-  Circles = window.Circles = function(options) {
+  Circles = function(options) {
     var elId = options.id;
     this._el = document.getElementById(elId);
 
