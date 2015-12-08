@@ -42,6 +42,24 @@ describe('Circles', function() {
       expect(circles.getMaxValue()).toEqual(100);
     });
 
+
+    it('should not create Circles instance with provided invalid DOM element to hold the graph', function() {
+      var circles = Circles.create({});
+      expect(circles instanceof Circles).toBeTruthy();
+      expect(circles.getValue()).toBeUndefined();
+      expect(circles.getMaxValue()).toBeUndefined();
+      expect(element.firstChild).toBeNull();
+    });
+
+    it('should create Circles instance with provided valid DOM element to hold the graph', function() {
+      var circles = Circles.create({el: element});
+      expect(circles instanceof Circles).toBeTruthy();
+      expect(circles.getValue()).toEqual(0);
+      expect(circles.getMaxValue()).toEqual(100);
+      expect(element.firstChild).not.toBeNull();
+      expect(element.firstChild.className).toEqual('circles-wrp');
+    });
+
     describe('Generated content', function() {
 
       beforeEach(function() {
