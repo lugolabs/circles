@@ -148,7 +148,7 @@ To help with this, a few CSS classes have been exposed:
 * `circles-integer`   - the element wrapping the text before the dot
 * `circles-decimals` 	- the element wrapping the decimal places
 
-You can overwritte these classes by sending properties `wrpClass` and/or `textClass` to the constructor.
+You can override these classes by sending properties `wrpClass` and/or `textClass` to the constructor.
 
 
 ### Tests
