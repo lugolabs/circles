@@ -7,7 +7,8 @@
 
   Call Circles.create(options) with the following options:
 
-    id         - the DOM element that will hold the graph
+    id         - id of the DOM element that will hold the graph
+    element    - the DOM element that will hold the graph, will be used in favour of id if provided
     radius     - the radius of the circles
     width      - the width of the ring (optional, has value 10, if not specified)
     value      - init value of the circle (optional, defaults to 0)
@@ -68,7 +69,7 @@
 
   Circles = function(options) {
     var elId = options.id;
-    this._el = document.getElementById(elId);
+    this._el = options.element || document.getElementById(elId);
 
     if (this._el === null) return;
 
