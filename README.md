@@ -37,7 +37,8 @@ var myCircle = Circles.create({
 
 where
 
-* `id` 			      - the DOM element that will hold the graph
+* `id` 			      - the id of DOM element that will hold the graph
+* `el`            - the DOM element that will hold the graph
 * `radius` 		    - the radius of the circles
 * `value` 		    - init value of the circle (optional, defaults to 0)
 * `maxValue` 	    - maximum value of the circle (optional, defaults to 100)

@@ -68,9 +68,12 @@
 
   Circles = function(options) {
     var elId = options.id;
-    this._el = document.getElementById(elId);
+    this._el = options.el || document.getElementById(elId);
 
-    if (this._el === null) return;
+    if (this._el === null) {
+      console.log('Please provide element or element id');
+      return false;
+    }
 
     this._radius         = options.radius || 10;
     this._duration       = options.duration === undefined ? 500 : options.duration;
