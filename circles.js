@@ -67,8 +67,11 @@
                      },
 
   Circles = function(options) {
-    var elId = options.id;
-    this._el = document.getElementById(elId);
+    if (options.el) {
+      this._el = options.el;
+    } else {
+      this._el = document.getElementById(options.id);
+    }
 
     if (this._el === null) return;
 
