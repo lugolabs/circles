@@ -67,8 +67,11 @@
                      },
 
   Circles = function(options) {
-    var elId = options.id;
-    this._el = document.getElementById(elId);
+    if (options.el) {
+      this._el = options.el;
+    } else {
+      this._el = document.getElementById(options.id);
+    }
 
     if (this._el === null) return;
 
@@ -151,7 +154,7 @@
           left:       0,
           textAlign:  'center',
           width:      '100%',
-          fontSize:   (this._radius * .7) + 'px',
+          fontSize:   (this._radius * .8) + 'px',
           height:     this._svgSize + 'px',
           lineHeight: this._svgSize + 'px'
         };
