@@ -75,7 +75,7 @@
     this._radius         = options.radius || 10;
     this._duration       = options.duration === undefined ? 500 : options.duration;
 
-    this._value          = 0;
+    this._value          = 0.0000001;
     this._maxValue       = options.maxValue || 100;
 
     this._text           = options.text === undefined ? function(value){return this.htmlifyNumber(value);} : options.text;
