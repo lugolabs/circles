@@ -1,0 +1,30 @@
+<html>
+<head>
+	<title>Circles</title>
+	<style>
+		.circle {
+			display: inline-block;
+			margin: 1em;
+		}
+
+		.circles-decimals {
+			font-size: .4em;
+		}
+	</style>
+</head>
+<body>
+	<div class="circle" id="circles-1"></div>
+
+	<script src="../circles.js"></script>
+	<script>
+		Circles.create({
+			id:           'circles-1',
+			value:        30,
+			radius:       60,
+			width:        10,
+			duration:     1,
+			colors:       ['#D3B6C6', '#4B253A']
+		});
+	</script>
+</body>
+</html>

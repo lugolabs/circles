@@ -2,7 +2,12 @@
 <head>
 	<title>Circles</title>
 	<style>
-		#canvas .circle {
+		.canvas {
+			margin-top: 1em;
+			text-align: center;
+		}
+
+		.circle {
 			display: inline-block;
 			margin: 1em;
 		}
@@ -10,21 +15,30 @@
 		.circles-decimals {
 			font-size: .4em;
 		}
+
+		.buttons {
+			margin-top: 1em;
+		}
+
+		button {
+			font-size: .8em;
+			padding: .3em .8em;
+		}
 	</style>
 </head>
 <body>
-	<div id="canvas">
+	<div class="canvas">
 		<div class="circle" id="circles-1"></div>
 		<div class="circle" id="circles-2"></div>
 		<div class="circle" id="circles-3"></div>
 		<div class="circle" id="circles-4"></div>
 		<div class="circle" id="circles-5"></div>
-		<br />
-		<button id="add_button">Value +10</button>
-		<button id="substract_button">Value -10</button>
-		<button id="add_width_button">Width +10</button>
-		<button id="substract_width_button">Width -10</button>
-		<button id="colors_button">Swap colors</button>
+		<div class="buttons">
+			<button id="change-value-button">Change values to 20</button>
+			<button id="add-width-button">Change width to 20</button>
+			<button id="substract-width-button">Change width to 10</button>
+			<button id="colors-button">Swap colors</button>
+		</div>
 	</div>
 
 	<script src="../circles.min.js"></script>
@@ -52,31 +66,26 @@
 			}));
 		}
 
-		document.getElementById('add_button').onclick = function()
+		document.getElementById('change-value-button').onclick = function()
 		{
 		    for(var i = 0, l = circles.length; i < l; i++)
-				circles[i].update(circles[i]._value + 10, 250);
+				circles[i].update(20, 250);
 		};
 
-		document.getElementById('substract_button').onclick = function()
+		document.getElementById('add-width-button').onclick = function()
+		{
+			for(var i = 0, l = circles.length; i < l; i++) {
+				circles[i].updateWidth(20);
+			}
+		};
+
+		document.getElementById('substract-width-button').onclick = function()
 		{
 			for(var i = 0, l = circles.length; i < l; i++)
-				circles[i].update(circles[i]._value - 10, 250);
+				circles[i].updateWidth(10);
 		};
 
-		document.getElementById('add_width_button').onclick = function()
-		{
-			for(var i = 0, l = circles.length; i < l; i++)
-				circles[i].updateWidth(circles[i]._strokeWidth + 10);
-		};
-
-		document.getElementById('substract_width_button').onclick = function()
-		{
-			for(var i = 0, l = circles.length; i < l; i++)
-				circles[i].updateWidth(circles[i]._strokeWidth - 10);
-		};
-
-		document.getElementById('colors_button').onclick = function()
+		document.getElementById('colors-button').onclick = function()
 		{
 			colors = shuffle(colors);
 			for(var i = 0, l = circles.length; i < l; i++)
