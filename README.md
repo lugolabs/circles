@@ -1,6 +1,6 @@
 # Circles
 
-![Circles](http://lugolabs.com/static/circles.png)
+![Circles](https://www.lugolabs.com/static/circles.png)
 
 Lightweight JavaScript library that generates circular graphs in SVG. Now with animation.
 
