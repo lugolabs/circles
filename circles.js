@@ -9,7 +9,8 @@
 
     id         - the DOM element that will hold the graph
     radius     - the radius of the circles
-    width      - the width of the ring (optional, has value 10, if not specified)
+    width      - the width of the frontal ring (optional, has value 10, if not specified)
+    outerWidth   the width of the background ring (optional, has value 10, if not specified)
     value      - init value of the circle (optional, defaults to 0)
     maxValue   - maximum value of the circle (optional, defaults to 100)
     text       - the text to display at the centre of the graph (optional, the current "htmlified" value will be shown if not specified)
@@ -30,7 +31,7 @@
 
     API:
       updateRadius(radius) - regenerates the circle with the given radius (see spec/responsive.html for an example hot to create a responsive circle)
-      updateWidth(width) - regenerates the circle with the given stroke width
+      updateWidth(width, outerWidth) - regenerates the circle with the given frontal stroke width and the back stroke outerWidth
       updateColors(colors) - change colors used to draw the circle
       update(value, duration) - update value of circle. If value is set to true, force the update of displaying
       getPercent() - returns the percentage value of the circle, based on its current value and its max value
@@ -80,6 +81,9 @@
 
     this._text           = options.text === undefined ? function(value){return this.htmlifyNumber(value);} : options.text;
     this._strokeWidth    = options.width  || 10;
+    this._outStrokeWidth = options.outerWidth || 10;
+    this._bigStrokeWidth = this._outStrokeWidth >= this._strokeWidth ? this._outStrokeWidth : this._strokeWidth;
+
     this._colors         = options.colors || ['#EEE', '#F00'];
     this._svg            = null;
     this._movingPath     = null;
@@ -104,12 +108,12 @@
   };
 
   Circles.prototype = {
-    VERSION: '0.0.6',
+    VERSION: '0.0.7',
 
     _generate: function() {
 
       this._svgSize        = this._radius * 2;
-      this._radiusAdjusted = this._radius - (this._strokeWidth / 2);
+      this._radiusAdjusted = this._radius - (this._bigStrokeWidth / 2);
 
       this._generateSvg()._generateText()._generateWrapper();
 
@@ -182,18 +186,18 @@
       this._svg.setAttribute('width', this._svgSize);
       this._svg.setAttribute('height', this._svgSize);
 
-      this._generatePath(100, false, this._colors[0], this._maxValClass)._generatePath(1, true, this._colors[1], this._valClass);
+      this._generatePath(100, false, this._colors[0], this._maxValClass, true)._generatePath(1, true, this._colors[1], this._valClass);
 
       this._movingPath = this._svg.getElementsByTagName('path')[1];
 
       return this;
     },
 
-    _generatePath: function(percentage, open, color, pathClass) {
+    _generatePath: function(percentage, open, color, pathClass, outerDraw) {
       var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       path.setAttribute('fill', 'transparent');
       path.setAttribute('stroke', color);
-      path.setAttribute('stroke-width', this._strokeWidth);
+      path.setAttribute('stroke-width', (outerDraw ? this._outStrokeWidth : this._strokeWidth) );
       path.setAttribute('d',  this._calculatePath(percentage, open));
       path.setAttribute('class', pathClass);
 
@@ -254,8 +258,10 @@
       return this._generate().update(true);
     },
 
-    updateWidth: function(width) {
+    updateWidth: function(width, outerWidth) {
       this._strokeWidth = width;
+      this._outStrokeWidth = outerWidth || this._outStrokeWidth;
+      this._bigStrokeWidth = this._outStrokeWidth >= this._strokeWidth ? this._outStrokeWidth : this._strokeWidth;
 
       return this._generate().update(true);
     },

@@ -23,6 +23,7 @@ var myCircle = Circles.create({
   value:               43,
   maxValue:            100,
   width:               10,
+  outerWidth:          10,
   text:                function(value){return value + '%';},
   colors:              ['#D3B6C6', '#4B253A'],
   duration:            400,
@@ -41,7 +42,8 @@ where
 * `radius` 		    - the radius of the circles
 * `value` 		    - init value of the circle (optional, defaults to 0)
 * `maxValue` 	    - maximum value of the circle (optional, defaults to 100)
-* `width` 		    - the width of the ring (optional, has value 10, if not specified)
+* `width` 		    - the width of the frontal ring (optional, has value 10, if not specified)
+* `outerWidth`    - the width of the back ring (optional, has value 10, if not specified)
 * `colors` 		    - an array of colors, with the first item coloring the full circle (optional, it will be `['#EEE', '#F00']` if not specified) Can also be an rgba() value (example: ['rgba(255,255,255,0.25)', 'rgba(125,125,125,0.5)'])
 * `duration` 	    - value in ms of animation's duration; defaults to 500; if 0 or `null` is passed, the animation will not run.
 * `wrpClass` 	    - class name to apply on the generated element wrapping the whole circle.
@@ -80,10 +82,10 @@ myCircle.updateRadius(Number radius)
 Regenerates the circle with the given `radius` (see `spec/responsive.html` for an example on how to create a responsive circle).
 
 ```js
-myCircle.updateWidth(Number width)
+myCircle.updateWidth(Number width, Number `outerWidth`)
 ```
 
-Regenerates the circle with the given `width`
+Regenerates the circle with the given `width` for the frontal ring and `outerWidth` for the back ring
 
 ```js
 myCircle.updateColors(Array colors)
@@ -214,6 +216,7 @@ Circles is licensed under the terms of the MIT License.
 
 ### Changelog
 
+* 0.0.7    Add feature to have different outer and inner strokes.
 * 0.0.6    Make inline styles optional.
 * 0.0.5    Rethink a bit the way the library is working + add some public methods.
 * 0.0.4    Exposes `generate(radius)` to regenerate the circle, opening it to responsiveness.

@@ -259,8 +259,9 @@ describe('Circles', function() {
     });
 
     it('can update stroke width', function() {
-      circle.updateWidth(20);
+      circle.updateWidth(20, 40);
 
+      expect(getSVG().getElementsByTagName('path')[0].getAttribute('stroke-width') == 40).toBeTruthy();
       expect(getSVG().getElementsByTagName('path')[1].getAttribute('stroke-width') == 20).toBeTruthy();
     });
 
